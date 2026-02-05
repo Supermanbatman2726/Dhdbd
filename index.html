@@ -20,6 +20,11 @@
             --google-blue: #4285F4;
             --whatsapp-green: #25D366;
             
+            /* Colori Servizi */
+            --service-red: #ff3b30;
+            --service-yellow: #ffcc00;
+            --service-blue: #007aff;
+
             /* Token Stile Glass Header */
             --glass-bg: rgba(255, 255, 255, 0.65); 
             --glass-blur: blur(20px) saturate(180%);
@@ -189,7 +194,7 @@
         }
 
         /* ==========================================
-           5. CONTENUTI
+           5. CONTENUTI & SERVIZI (GRIGLIA)
            ========================================== */
         .scroll-content {
             position: relative; z-index: 10; width: 100%;
@@ -214,92 +219,140 @@
         }
 
         .block-title { font-size: 56px; font-weight: 800; color: #1d1d1f; letter-spacing: -2.5px; margin-bottom: 5px; }
-        .block-tag { font-size: 11px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 5px; display: block; margin-bottom: 30px; }
+        .block-tag { font-size: 11px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 5px; display: block; margin-bottom: 40px; }
 
-        /* WIDGET SCROLLER */
-        .iphone-widgets-container {
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .service-card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 30px;
+            text-align: left;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+        }
+
+        .service-icon-box {
+            width: 64px; height: 64px; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;
+            color: #fff; font-size: 28px; transition: transform 0.3s ease;
+        }
+        .service-card:hover .service-icon-box { transform: scale(1.1) rotate(5deg); }
+
+        .card-red .service-icon-box { background: linear-gradient(135deg, var(--service-red), #d63228); box-shadow: 0 8px 20px rgba(255, 59, 48, 0.4); }
+        .card-yellow .service-icon-box { background: linear-gradient(135deg, var(--service-yellow), #f0b900); box-shadow: 0 8px 20px rgba(255, 204, 0, 0.4); color: #1d1d1f; }
+        .card-blue .service-icon-box { background: linear-gradient(135deg, var(--service-blue), #005ec4); box-shadow: 0 8px 20px rgba(0, 122, 255, 0.4); }
+
+        .service-card h3 { font-size: 24px; font-weight: 700; color: #1d1d1f; margin-bottom: 12px; letter-spacing: -0.5px; }
+        .service-card p { font-size: 16px; line-height: 1.5; color: #86868b; font-weight: 500; }
+
+        /* ==========================================
+           6. SEZIONE RECENSIONI SCROLL
+           ========================================== */
+        .reviews-container-wrapper {
             width: 100%; 
             overflow-x: auto; 
             display: flex; 
-            align-items: center; 
-            gap: 24px; 
+            align-items: stretch; 
+            gap: 20px; 
             padding: 10px 20px 40px 20px; 
             -webkit-overflow-scrolling: touch; 
             scroll-snap-type: x mandatory; 
             scrollbar-width: none;
             cursor: grab; 
-            user-select: none; 
+            user-select: none;
         }
-        .iphone-widgets-container.active {
-            cursor: grabbing;
-            scroll-snap-type: none; 
+        .reviews-container-wrapper.active { cursor: grabbing; scroll-snap-type: none; }
+        .reviews-container-wrapper::-webkit-scrollbar { display: none; }
+
+        .review-card {
+            flex: 0 0 85vw; /* Mobile: largo */
+            max-width: 400px; /* Desktop: fisso */
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: left;
+            transition: transform 0.3s ease;
         }
-        .iphone-widgets-container::-webkit-scrollbar { display: none; }
+        .review-card:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
 
-        .ios-widget {
-            /* DIMENSIONI */
-            flex: 0 0 85vw;
-            max-width: 380px; 
-            height: 260px; 
-            
-            background: #f5f5f7; 
-            border-radius: 28px; padding: 24px;
-            
-            /* CENTRATURA E FLEXBOX AGGIORNATI */
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; /* Centra verticalmente */
-            align-items: center; /* Centra orizzontalmente */
-            gap: 20px; /* Spazio tra icona e testo */
-            text-align: center; /* Centra il testo */
-
-            scroll-snap-align: center; 
-            scroll-snap-stop: always; 
-            
-            transition: transform 0.3s ease, opacity 0.3s ease; 
-            opacity: 0.5; transform: scale(0.95);
+        .review-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+        .reviewer-info { display: flex; align-items: center; gap: 12px; }
+        .reviewer-initial { 
+            width: 40px; height: 40px; background: #f0f0f0; color: #1d1d1f; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; 
         }
+        .reviewer-name-box h4 { font-size: 15px; font-weight: 700; color: #1d1d1f; }
+        .reviewer-meta { font-size: 12px; color: #86868b; margin-top: 2px; }
 
-        .ios-widget.is-active {
-            opacity: 1; transform: scale(1);
-            background: #ffffff; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
-            border: 1px solid rgba(0,0,0,0.03);
+        .google-verified { 
+            display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #4285F4; 
+            background: rgba(66, 133, 244, 0.1); padding: 4px 8px; border-radius: 20px; 
         }
 
-        .widget-icon-box { 
-            width: 50px; height: 50px; border-radius: 14px; 
-            display: flex; align-items: center; justify-content: center; 
-            color: #fff; margin-bottom: 0; /* Rimosso margin-bottom a favore del gap */
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15); 
-        }
-        .bg-blue { background: #007aff; } .bg-green { background: #34c759; }
-        .bg-orange { background: #ff9500; } .bg-indigo { background: #5856d6; }
+        .stars { margin-bottom: 12px; display: flex; gap: 2px; }
+        .stars svg { width: 18px; height: 18px; fill: #FBBC05; }
 
-        .widget-content h3 { font-size: 22px; font-weight: 800; color: #1d1d1f; margin-bottom: 8px; } 
-        .widget-content p { font-size: 15px; color: #6e6e73; font-weight: 500; line-height: 1.45; } 
+        .review-text { font-size: 15px; line-height: 1.5; color: #424245; margin-bottom: 20px; flex-grow: 1; }
+        .review-text .more { color: #86868b; }
 
-        .scroller-progress-container {
-            width: 100px; height: 4px; background: rgba(0,0,0,0.05); border-radius: 10px; margin: 0 auto; position: relative; overflow: hidden;
+        .owner-response { 
+            background: #f5f5f7; border-radius: 16px; padding: 14px; margin-top: auto; 
+            border-left: 3px solid #1d1d1f; 
         }
-        .scroller-progress-bar {
-            position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: var(--accent); border-radius: 10px; transition: width 0.1s ease-out;
+        .response-header { font-size: 12px; font-weight: 700; color: #1d1d1f; margin-bottom: 6px; text-transform: uppercase; }
+        .response-text { font-size: 13px; line-height: 1.4; color: #6e6e73; font-style: italic; }
+
+        /* Dots Navigation Style */
+        .dots-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 5px;
+            padding-bottom: 10px;
+        }
+        
+        .dot-nav {
+            width: 10px;
+            height: 10px;
+            background-color: #e5e5ea; /* Colore inattivo chiaro */
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        .dot-nav:hover {
+            background-color: #c7c7cc;
         }
 
-        /* --- WHATSAPP CTA --- */
-        .whatsapp-cta-section { 
-            max-width: 1100px; 
-            margin: var(--common-margin) auto; 
-            text-align: center; padding: 10px 20px; 
+        .dot-nav.active {
+            background-color: #1d1d1f; /* Colore attivo scuro */
+            transform: scale(1.2);
+            width: 12px; /* Leggero allargamento */
         }
-        .wa-btn {
-            display: inline-flex; align-items: center; gap: 15px;
-            background: #1d1d1f; border-radius: 50px;
-            padding: 20px 40px; font-size: 20px; font-weight: 700; color: #ffffff;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 10px 30px rgba(0,0,0,0.1); cursor: pointer;
-        }
-        .wa-btn:hover { transform: scale(1.05) translateY(-5px); background: #000; box-shadow: 0 20px 50px rgba(37, 211, 102, 0.3); }
-        .wa-icon { width: 28px; height: 28px; fill: var(--whatsapp-green); }
 
         /* --- CHI SIAMO SECTION --- */
         .about-section {
@@ -324,15 +377,18 @@
 
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } from { opacity: 0; transform: translateY(30px); } }
 
+        @media (max-width: 900px) {
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+        }
         @media (max-width: 768px) {
             .hero-title { font-size: 72px; letter-spacing: -3px; }
             .hero-section { padding-top: 18vh; min-height: 80vh; }
             .block-title { font-size: 38px; }
             .clean-section-container { width: 100%; padding: 40px 20px; }
-            /* Su mobile manteniamo la larghezza viewport per l'effetto focus */
-            .ios-widget { flex: 0 0 85vw; } 
-            .wa-btn { font-size: 18px; padding: 15px 30px; width: 90%; justify-content: center; }
+            .services-grid { grid-template-columns: 1fr; } /* Stack su mobile */
             .about-text { font-size: 18px; }
+            
+            .review-card { flex: 0 0 85vw; }
         }
     </style>
 </head>
@@ -366,6 +422,7 @@
         <ul class="menu-items">
             <li><a href="#">Home</a></li>
             <li><a href="#">Servizi</a></li>
+            <li><a href="#">Recensioni</a></li>
             <li><a href="#">Contatti</a></li>
         </ul>
     </div>
@@ -408,8 +465,8 @@
             
             <!-- SEPARATOR & DISCOVER -->
             <div class="hero-separator">oppure</div>
-            <button class="discover-btn" onclick="scrollToWidgets()">
-                Scopri di più
+            <button class="discover-btn" onclick="scrollToServices()">
+                Scopri i servizi
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
             </button>
 
@@ -419,66 +476,270 @@
     <!-- WRAPPER CONTENUTI -->
     <div class="scroll-content">
 
-        <!-- SEZIONE: PERCHÉ SCEGLIERCI -->
-        <section class="clean-section-container" id="percheSceglierci">
-            <h2 class="block-title">Perché Sceglierci</h2>
-            <span class="block-tag">L'Eccellenza QuanTech</span>
+        <!-- SEZIONE: I NOSTRI SERVIZI -->
+        <section class="clean-section-container" id="iNostriServizi">
+            <h2 class="block-title">I Nostri Servizi</h2>
+            <span class="block-tag">Soluzioni Complete</span>
             
-            <div class="iphone-widgets-container" id="widgetContainer">
-                
-                <div class="ios-widget">
-                    <div class="widget-icon-box bg-blue">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <div class="services-grid">
+                <!-- CARD 1: RIPARAZIONI (ROSSO) -->
+                <div class="service-card card-red">
+                    <div class="service-icon-box">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
                     </div>
-                    <div class="widget-content">
-                        <h3>Velocità Flash</h3>
-                        <p>Riparazioni certificate in meno di 60 minuti. Il tempo è il vero lusso.</p>
-                    </div>
+                    <h3>Riparazioni</h3>
+                    <p>Interventi hardware rapidi e precisi. Sostituzione schermi, batterie e componenti con garanzia certificata. Il tuo device torna come nuovo in meno di un'ora.</p>
                 </div>
 
-                <div class="ios-widget">
-                    <div class="widget-icon-box bg-green">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <!-- CARD 2: VENDITA (GIALLO) -->
+                <div class="service-card card-yellow">
+                    <div class="service-icon-box">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                     </div>
-                    <div class="widget-content">
-                        <h3>Garanzia 12M</h3>
-                        <p>Copertura totale su ogni componente. La qualità QuanTech è certificata.</p>
-                    </div>
+                    <h3>Vendita</h3>
+                    <p>Smartphone nuovi e ricondizionati di grado A+. Accessori premium e cover protettive. La migliore tecnologia selezionata per offrirti qualità e risparmio.</p>
                 </div>
 
-                <div class="ios-widget">
-                    <div class="widget-icon-box bg-orange">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9z"></path></svg>
+                <!-- CARD 3: ASSISTENZA (BLU) -->
+                <div class="service-card card-blue">
+                    <div class="service-icon-box">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                     </div>
-                    <div class="widget-content">
-                        <h3>Parti OEM</h3>
-                        <p>Utilizziamo solo componenti originali per non intaccare il valore del device.</p>
-                    </div>
+                    <h3>Assistenza</h3>
+                    <p>Supporto tecnico software, configurazioni, trasferimenti dati e recupero account. Siamo il tuo Genius Bar personale per risolvere ogni dubbio digitale.</p>
                 </div>
-
-                <div class="ios-widget">
-                    <div class="widget-icon-box bg-indigo">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="9" y1="9" x2="9" y2="15"></line><line x1="15" y1="9" x2="15" y2="15"></line></svg>
-                    </div>
-                    <div class="widget-content">
-                        <h3>Diagnostica AI</h3>
-                        <p>Analisi computerizzata gratuita per scoprire guasti latenti o futuri.</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="scroller-progress-container">
-                <div class="scroller-progress-bar" id="widgetProgress"></div>
             </div>
         </section>
 
-        <!-- WHATSAPP CTA -->
-        <section class="whatsapp-cta-section">
-            <a href="https://wa.me/390000000000" class="wa-btn" target="_blank">
-                <svg class="wa-icon" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-5.5-2.8-23.2-8.5-44.2-27.1-16.4-14.6-27.4-32.7-30.6-38.2-3.2-5.6-.3-8.6 2.4-11.3 2.5-2.4 5.5-6.5 8.3-9.7 2.8-3.3 3.7-5.6 5.5-9.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 13.2 5.8 23.5 9.2 31.5 11.8 13.3 4.2 25.4 3.6 35 2.2 10.7-1.5 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
-                WhatsApp Assistenza
-            </a>
+        <!-- SEZIONE: RECENSIONI SCROLL -->
+        <section class="clean-section-container" id="recensioniClienti">
+            <h2 class="block-title">Dicono di Noi</h2>
+            <span class="block-tag">Esperienze Reali</span>
+
+            <div class="reviews-container-wrapper" id="reviewsContainer">
+                
+                <!-- Recensione 1: Sante -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-initial">S</div>
+                            <div class="reviewer-name-box">
+                                <h4>Sante Alberga</h4>
+                                <div class="reviewer-meta">3 recensioni • 2 settimane fa</div>
+                            </div>
+                        </div>
+                        <div class="google-verified">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 16.25 5 12c0-4.1 3.2-7.27 7.2-7.27 3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10 5.35 0 9.25-3.67 9.25-9.09 0-1.15-.15-1.81-.15-1.81z"></path></svg>
+                            Verificato
+                        </div>
+                    </div>
+                    <div class="stars">
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </div>
+                    <p class="review-text">
+                        "Ero veramente in difficoltà per la situazione in cui ero schermo rotto e cristalli rotti i phone 15 pro Max sono arrivato in questo negozio proprietario disponibile, gentile e veloce in mezz’ora mi ha cambiato schermo..."
+                    </p>
+                    <div class="owner-response">
+                        <div class="response-header">Risposta dal proprietario</div>
+                        <p class="response-text">Grazie di cuore per le belle parole Sante!</p>
+                    </div>
+                </div>
+
+                <!-- Recensione 2: Sirya -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-initial">S</div>
+                            <div class="reviewer-name-box">
+                                <h4>Sirya Brognara</h4>
+                                <div class="reviewer-meta">4 recensioni • 1 mese fa</div>
+                            </div>
+                        </div>
+                        <div class="google-verified">
+                             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 16.25 5 12c0-4.1 3.2-7.27 7.2-7.27 3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10 5.35 0 9.25-3.67 9.25-9.09 0-1.15-.15-1.81-.15-1.81z"></path></svg>
+                             Verificato
+                        </div>
+                    </div>
+                    <div class="stars">
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </div>
+                    <p class="review-text">
+                        "Lavoro impeccabile! Ho portato il mio telefono perche non leggeva piu la SIM. In un giorno il lavoro è stato fatto alla perfezione e in tempi brevissimi. Proprietario gentilissimo..."
+                    </p>
+                    <div class="owner-response">
+                        <div class="response-header">Risposta dal proprietario</div>
+                        <p class="response-text">Grazie di cuore Sirya per la bella recensione!!!</p>
+                    </div>
+                </div>
+
+                <!-- Recensione 3: Pietro -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-initial">P</div>
+                            <div class="reviewer-name-box">
+                                <h4>Pietro Perta</h4>
+                                <div class="reviewer-meta">4 recensioni • 3 mesi fa</div>
+                            </div>
+                        </div>
+                        <div class="google-verified">
+                             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 16.25 5 12c0-4.1 3.2-7.27 7.2-7.27 3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10 5.35 0 9.25-3.67 9.25-9.09 0-1.15-.15-1.81-.15-1.81z"></path></svg>
+                             Verificato
+                        </div>
+                    </div>
+                    <div class="stars">
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </div>
+                    <p class="review-text">
+                        "Mi sono rivolto a questo negozio per sostituire la batteria del mio iPhone 12 Pro e il display dell’Apple Watch Serie 7. Servizio impeccabile! 🔧 Proprietario gentile..."
+                    </p>
+                    <div class="owner-response">
+                        <div class="response-header">Risposta dal proprietario</div>
+                        <p class="response-text">Grazie mille Pietro!!</p>
+                    </div>
+                </div>
+
+                <!-- Recensione 4: Leonardo -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-initial">L</div>
+                            <div class="reviewer-name-box">
+                                <h4>Leonardo Malinverni</h4>
+                                <div class="reviewer-meta">1 recensione • 2 mesi fa</div>
+                            </div>
+                        </div>
+                        <div class="google-verified">
+                             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 16.25 5 12c0-4.1 3.2-7.27 7.2-7.27 3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10 5.35 0 9.25-3.67 9.25-9.09 0-1.15-.15-1.81-.15-1.81z"></path></svg>
+                             Verificato
+                        </div>
+                    </div>
+                    <div class="stars">
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </div>
+                    <p class="review-text">
+                        "Esperienza positivissima! Mi sono recato per sostituire la batteria del mio Iphone 12 dopo aver visto le 5 stelle e le recensioni positive, e l'esperienza ha decisamente confermato le aspettative..."
+                    </p>
+                    <div class="owner-response">
+                        <div class="response-header">Risposta dal proprietario</div>
+                        <p class="response-text">Grazie mille Leonardo, siamo molto felici che tu sia rimasto soddisfatto del servizio!!</p>
+                    </div>
+                </div>
+
+                <!-- Recensione 5: Edoardo -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-initial">E</div>
+                            <div class="reviewer-name-box">
+                                <h4>Edoardo Cadore</h4>
+                                <div class="reviewer-meta">2 recensioni • 2 mesi fa</div>
+                            </div>
+                        </div>
+                        <div class="google-verified">
+                             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 16.25 5 12c0-4.1 3.2-7.27 7.2-7.27 3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10 5.35 0 9.25-3.67 9.25-9.09 0-1.15-.15-1.81-.15-1.81z"></path></svg>
+                             Verificato
+                        </div>
+                    </div>
+                    <div class="stars">
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </div>
+                    <p class="review-text">
+                        "Ho portato il mio iPhone 13 per sostituire schermo e batteria e sono rimasto davvero soddisfatto del servizio. Proprietario gentile, professionale e molto disponibile..."
+                    </p>
+                    <div class="owner-response">
+                        <div class="response-header">Risposta dal proprietario</div>
+                        <p class="response-text">Grazie davvero Edoardo!!</p>
+                    </div>
+                </div>
+
+                <!-- Recensione 6: Cristian -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-initial">C</div>
+                            <div class="reviewer-name-box">
+                                <h4>CRISTIAN MAZZONE</h4>
+                                <div class="reviewer-meta">1 recensione • 5 mesi fa</div>
+                            </div>
+                        </div>
+                        <div class="google-verified">
+                             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 16.25 5 12c0-4.1 3.2-7.27 7.2-7.27 3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10 5.35 0 9.25-3.67 9.25-9.09 0-1.15-.15-1.81-.15-1.81z"></path></svg>
+                             Verificato
+                        </div>
+                    </div>
+                    <div class="stars">
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </div>
+                    <p class="review-text">
+                        "Il proprietario è molto gentile e professionale. Mi sono recato da lui a seguito delle tante recensioni positive. Mi ha cambiato la batteria del telefono e ha pulito il caricabatterie..."
+                    </p>
+                    <div class="owner-response">
+                        <div class="response-header">Risposta dal proprietario</div>
+                        <p class="response-text">Grazie mille per le belle parole Cristian!!</p>
+                    </div>
+                </div>
+
+                 <!-- Recensione 7: Extra -->
+                 <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-initial">M</div>
+                            <div class="reviewer-name-box">
+                                <h4>Marco Verga</h4>
+                                <div class="reviewer-meta">5 recensioni • 3 settimane fa</div>
+                            </div>
+                        </div>
+                        <div class="google-verified">
+                             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 16.25 5 12c0-4.1 3.2-7.27 7.2-7.27 3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10 5.35 0 9.25-3.67 9.25-9.09 0-1.15-.15-1.81-.15-1.81z"></path></svg>
+                             Verificato
+                        </div>
+                    </div>
+                    <div class="stars">
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                         <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </div>
+                    <p class="review-text">
+                        "Servizio eccellente! Sono passato per un problema al connettore di ricarica, risolto in 20 minuti senza dover sostituire il pezzo. Onestà e competenza rare."
+                    </p>
+                    <div class="owner-response">
+                        <div class="response-header">Risposta dal proprietario</div>
+                        <p class="response-text">Grazie Marco, l'onestà è il nostro primo valore!</p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- DOTS NAV (al posto della progress bar) -->
+            <div class="dots-nav" id="dotsNav"></div>
+
         </section>
 
         <!-- SEZIONE: CHI SIAMO -->
@@ -506,23 +767,68 @@
             overlay.classList.toggle('active');
         }
 
-        function scrollToWidgets() {
-            document.getElementById('percheSceglierci').scrollIntoView({ behavior: 'smooth' });
+        function scrollToServices() {
+            document.getElementById('iNostriServizi').scrollIntoView({ behavior: 'smooth' });
         }
 
-        const container = document.getElementById('widgetContainer');
-        const progressBar = document.getElementById('widgetProgress');
-        const widgets = document.querySelectorAll('.ios-widget');
+        /* Gestione Scroll e Dots per Recensioni */
+        function setupReviewDots() {
+            const container = document.getElementById('reviewsContainer');
+            const dotsNav = document.getElementById('dotsNav');
+            const cards = document.querySelectorAll('.review-card');
+            
+            if (!container || !dotsNav || cards.length === 0) return;
 
-        if (container) {
-            // Scroll Progress Logic
-            container.addEventListener('scroll', () => {
-                const maxScroll = container.scrollWidth - container.clientWidth;
-                const percentage = (container.scrollLeft / maxScroll) * 100;
-                progressBar.style.width = Math.min(percentage, 100) + '%';
+            // 1. Crea i dots
+            cards.forEach((card, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('dot-nav');
+                if (index === 0) dot.classList.add('active');
+                
+                // Click event per scrollare alla card specifica
+                dot.addEventListener('click', () => {
+                    const cardLeft = card.offsetLeft;
+                    // Sottrai un po' di padding se necessario per centrare meglio o allineare a sinistra
+                    const scrollPos = cardLeft - container.offsetLeft;
+                    
+                    container.scrollTo({
+                        left: scrollPos,
+                        behavior: 'smooth'
+                    });
+                });
+                
+                dotsNav.appendChild(dot);
             });
 
-            // DRAG TO SCROLL LOGIC FOR DESKTOP
+            const dots = document.querySelectorAll('.dot-nav');
+
+            // 2. Aggiorna active dot durante lo scroll
+            container.addEventListener('scroll', () => {
+                // Trova la card più vicina al bordo sinistro del container
+                let activeIndex = 0;
+                let minDistance = Number.MAX_VALUE;
+
+                cards.forEach((card, index) => {
+                    // Calcola la distanza dell'inizio della card rispetto all'inizio visuale del container
+                    const distance = Math.abs(card.offsetLeft - container.offsetLeft - container.scrollLeft);
+                    
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        activeIndex = index;
+                    }
+                });
+
+                // Aggiorna classi
+                dots.forEach((dot, index) => {
+                    if (index === activeIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            });
+
+            // 3. Mouse Drag Scrolling
             let isDown = false;
             let startX;
             let scrollLeft;
@@ -548,27 +854,13 @@
                 if (!isDown) return;
                 e.preventDefault();
                 const x = e.pageX - container.offsetLeft;
-                const walk = (x - startX) * 2; // Velocità di scorrimento
+                const walk = (x - startX) * 2; 
                 container.scrollLeft = scrollLeft - walk;
             });
         }
 
-        const section = document.getElementById('percheSceglierci');
-        if (section) {
-            const sectionObserver = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting) {
-                    widgets.forEach((widget, index) => {
-                        setTimeout(() => {
-                            widget.classList.add('is-active');
-                        }, index * 200);
-                    });
-                    sectionObserver.unobserve(section); 
-                }
-            }, { threshold: 0.3 });
-            sectionObserver.observe(section);
-        }
-
         document.addEventListener("DOMContentLoaded", () => {
+            // Counter Animation
             const counterElement = document.getElementById("reviewCounter");
             if (counterElement) {
                 const target = 184; 
@@ -587,9 +879,11 @@
                     if (frame === totalFrames) { clearInterval(counter); counterElement.innerText = target; }
                 }, frameDuration);
             }
+
+            // Avvia setup dots
+            setupReviewDots();
         });
     </script>
 </body>
 </html>
-
 
