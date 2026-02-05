@@ -1,357 +1,459 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NexGen | Soluzioni Digitali</title>
-<style>
-    /* --- VARIABILI & RESET --- */
-    :root {
-        --bg-color: #050505;
-        --accent-color: #7b2cbf; /* Viola Neon */
-        --accent-gradient: linear-gradient(135deg, #b040df 0%, #6e00ff 100%);
-        --text-white: #ffffff;
-        --text-gray: #b3b3b3;
-        --glass-bg: rgba(255, 255, 255, 0.05);
-        --glass-border: rgba(255, 255, 255, 0.1);
-        --glass-blur: 20px;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>White Glass Engine | Repair & Design</title>
     
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        background-color: var(--bg-color);
-        color: var(--text-white);
-        line-height: 1.6;
-        overflow-x: hidden;
-    }
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-    a { text-decoration: none; color: inherit; transition: 0.3s; }
-    ul { list-style: none; }
+    <style>
+        /* --- VARIABILI CSS --- */
+        :root {
+            --bg-color: #ffffff;
+            --text-main: #1d1d1f;
+            --text-muted: #86868b;
+            --accent: #007aff;
+            --trustpilot-green: #00b67a;
+            --whatsapp-green: #25D366;
+            /* Token Stile Glass Header */
+            --glass-bg: rgba(255, 255, 255, 0.15); 
+            --glass-blur: blur(20px) saturate(140%);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.25);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+            /* MODIFICA: Margine abbassato e uniformato */
+            --common-margin: 40px;
+        }
 
-    /* --- EFFETTI SFONDO --- */
-    .background-blobs {
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100vh;
-        z-index: -1;
-        overflow: hidden;
-    }
-    .blob {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(80px);
-        opacity: 0.4;
-    }
-    .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #5500ff; }
-    .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #ff0055; }
+        /* --- RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+        button { border: none; background: none; cursor: pointer; }
+        ul { list-style: none; }
 
-    /* --- HEADER (NAVBAR) --- */
-    .header {
-        position: fixed;
-        top: 0; left: 0; width: 100%;
-        padding: 20px 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        z-index: 1000;
-        background: rgba(5, 5, 5, 0.6);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border-bottom: 1px solid var(--glass-border);
-    }
+        /* ==========================================
+           0. SFONDO (NITIDO)
+           ========================================== */
+        .global-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -2; 
+            background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop'); 
+            background-size: cover; background-position: center; filter: brightness(0.9); transform: scale(1.02);
+        }
+        
+        .hero-vignette { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.1) 100%);
+            z-index: -1; pointer-events: none; 
+        }
 
-    .logo { font-size: 24px; font-weight: 800; letter-spacing: -1px; }
-    .logo span { color: #b040df; }
+        /* ==========================================
+           1. HEADER (ALWAYS ACTIVE GLASS)
+           ========================================== */
+        #SmartHeader { 
+            position: fixed; top: 20px; left: 2%; width: 96%; z-index: 1000; 
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 40px; 
+            display: flex;
+            flex-direction: column; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+            overflow: hidden; 
+        }
 
-    .nav-links { display: flex; gap: 30px; }
-    .nav-links a { font-weight: 500; font-size: 14px; opacity: 0.8; }
-    .nav-links a:hover { opacity: 1; color: #b040df; }
+        .header-top-row { 
+            display: flex; align-items: center; justify-content: flex-end; position: relative; padding: 10px 25px; width: 100%; height: 70px; 
+        }
+        .header-logo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transition: transform 0.3s ease; }
+        .header-logo img { height: 60px; width: auto; border-radius: 6px; }
 
-    .btn-nav {
-        padding: 10px 24px;
-        background: var(--accent-gradient);
-        border-radius: 50px;
-        font-weight: 600;
-        font-size: 14px;
-        box-shadow: 0 4px 15px rgba(110, 0, 255, 0.4);
-    }
-    .btn-nav:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(110, 0, 255, 0.6); }
+        .menu-toggle {
+            width: 44px; height: 44px; background-color: #000000; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 5px; transition: transform 0.2s ease, background-color 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.2); position: relative; z-index: 2;
+        }
+        .menu-toggle span { display: block; width: 20px; height: 2px; background-color: #fff; border-radius: 2px; }
 
-    /* --- HERO SECTION --- */
-    .hero {
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 0 20px;
-        margin-top: 60px; /* Offset header */
-    }
+        .announcement-bar-inner { 
+            width: 100%; height: 32px; background: rgba(0, 0, 0, 0.1); border-top: 1px solid rgba(255,255,255,0.1); 
+            display: flex; align-items: center; overflow: hidden; 
+        }
+        .marquee-content { 
+            display: flex; gap: 40px; white-space: nowrap; animation: marquee 50s linear infinite; 
+            padding-left: 100%; font-size: 11px; font-weight: 700; letter-spacing: 1px; 
+            text-transform: uppercase; color: #ffffff; align-items: center; 
+        }
+        .dot { color: var(--accent); font-size: 1.5em; vertical-align: middle; margin: 0 8px; position: relative; top: -1px; line-height: 1; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-    .hero-content { max-width: 800px; }
+        /* ==========================================
+           2. SIDE MENU
+           ========================================== */
+        .side-menu {
+            position: fixed; top: 0; right: 0; width: 350px; height: 100vh; background: rgba(255,255,255,0.95); backdrop-filter: blur(30px);
+            z-index: 2000; padding: 100px 40px; transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); box-shadow: -10px 0 40px rgba(0,0,0,0.1);
+        }
+        .side-menu.active { transform: translateX(0); }
+        .close-btn { position: absolute; top: 35px; right: 35px; width: 40px; height: 40px; background: #f0f0f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: background 0.2s; }
+        .menu-items a { font-size: 28px; font-weight: 700; color: #000; letter-spacing: -1px; }
+        .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 1999; opacity: 0; pointer-events: none; transition: opacity 0.4s; }
+        .menu-overlay.active { opacity: 1; pointer-events: all; }
 
-    .hero h1 {
-        font-size: 64px;
-        line-height: 1.1;
-        font-weight: 800;
-        margin-bottom: 20px;
-        background: linear-gradient(to right, #fff, #b3b3b3);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
+        /* ==========================================
+           3. HERO SECTION
+           ========================================== */
+        .hero-section { 
+            position: relative; width: 100%; min-height: 85vh; 
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start; 
+            padding-top: 20vh; 
+            text-align: center; background: transparent; 
+        }
+        .hero-content { position: relative; z-index: 10; padding: 0 20px; max-width: 1000px; display: flex; flex-direction: column; align-items: center; }
+        
+        .hero-title { 
+            font-size: 110px; font-weight: 800; line-height: 0.85; 
+            margin-top: 16px; 
+            letter-spacing: -5px; color: #ffffff; 
+            text-shadow: 0 20px 50px rgba(0,0,0,0.3); 
+            opacity: 0; 
+            filter: blur(15px);
+            background: linear-gradient(120deg, #fff 40%, rgba(255,255,255,0.4) 50%, #fff 60%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s linear infinite, revealText 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
-    .hero p {
-        font-size: 20px;
-        color: var(--text-gray);
-        margin-bottom: 40px;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-    }
+        @keyframes shimmer { to { background-position: 200% center; } }
+        @keyframes revealText {
+            to { opacity: 1; filter: blur(0px); transform: translateY(0); }
+            from { opacity: 0; filter: blur(15px); transform: translateY(40px); }
+        }
+        
+        .hero-desc { font-size: 26px; font-weight: 400; line-height: 1.3; max-width: 650px; margin: 30px auto 30px; color: rgba(255,255,255,0.9); text-shadow: 0 4px 20px rgba(0,0,0,0.5); opacity: 0; animation: fadeInUp 1s 0.4s forwards; }
 
-    .hero-btns { display: flex; gap: 15px; justify-content: center; }
+        .tp-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border: 1px solid #fff; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.4); border-radius: 24px; padding: 24px; margin-top: 10px; width: 340px; display: flex; flex-direction: column; gap: 16px; transition: all 0.3s ease; opacity: 0; animation: fadeInUp 1s 0.7s forwards; position: relative; overflow: hidden; }
+        .tp-card:hover { transform: translateY(-5px) scale(1.02); }
+        .tp-btn { background-color: #00D084; color: #ffffff; font-size: 15px; font-weight: 800; padding: 14px; border-radius: 14px; text-align: center; transition: background 0.2s; width: 100%; display: block; position: relative; z-index: 5; box-shadow: 0 5px 15px rgba(0, 208, 132, 0.3); }
 
-    .btn-primary {
-        padding: 16px 40px;
-        background: #fff;
-        color: #000;
-        border-radius: 50px;
-        font-weight: 700;
-        font-size: 16px;
-    }
-    .btn-secondary {
-        padding: 16px 40px;
-        background: rgba(255,255,255,0.1);
-        color: #fff;
-        border: 1px solid rgba(255,255,255,0.2);
-        border-radius: 50px;
-        font-weight: 700;
-        font-size: 16px;
-        backdrop-filter: blur(10px);
-    }
-    .btn-primary:hover, .btn-secondary:hover { transform: translateY(-3px); }
+        /* ==========================================
+           4. CONTENUTI (TUTTO SUL BIANCO)
+           ========================================== */
+        .scroll-content {
+            position: relative; z-index: 10; width: 100%;
+            background: linear-gradient(to bottom, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0) 5%, 
+                rgba(255,255,255,0.7) 10%, 
+                #ffffff 15%,              
+                #ffffff 100%
+            );
+            margin-top: 0; 
+            /* Ridotto padding top per avvicinare Hero al contenuto */
+            padding-top: 80px; 
+            padding-bottom: 60px;
+        }
 
-    /* --- FEATURES SECTION --- */
-    .features {
-        padding: 100px 20px;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
+        .clean-section-container {
+            max-width: 1100px;
+            /* Margine uniformato */
+            margin: 0 auto var(--common-margin);
+            padding: 20px 40px;
+            text-align: center;
+        }
 
-    .section-title {
-        text-align: center;
-        margin-bottom: 60px;
-    }
-    .section-title h2 { font-size: 36px; margin-bottom: 10px; }
-    .section-title p { color: var(--text-gray); }
+        .block-title { font-size: 56px; font-weight: 800; color: #1d1d1f; letter-spacing: -2.5px; margin-bottom: 5px; }
+        .block-tag { font-size: 11px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 5px; display: block; margin-bottom: 30px; }
 
-    .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 30px;
-    }
+        /* WIDGET SCROLLER SU BIANCO */
+        .iphone-widgets-container {
+            width: 100%; overflow-x: auto; display: flex; gap: 20px; padding: 10px 0 30px 0; 
+            -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+        .iphone-widgets-container::-webkit-scrollbar { display: none; }
 
-    .feature-card {
-        background: var(--glass-bg);
-        border: 1px solid var(--glass-border);
-        padding: 40px 30px;
-        border-radius: 24px;
-        transition: 0.3s;
-    }
-    .feature-card:hover {
-        background: rgba(255,255,255,0.08);
-        transform: translateY(-10px);
-        border-color: rgba(255,255,255,0.3);
-    }
+        .ios-widget {
+            flex: 0 0 240px; height: 180px;   
+            background: #f5f5f7; 
+            border-radius: 28px; padding: 20px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            scroll-snap-align: center; text-align: left;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            opacity: 0.5; transform: scale(0.92);
+        }
 
-    .icon-box {
-        width: 50px; height: 50px;
-        background: rgba(255,255,255,0.1);
-        border-radius: 12px;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
+        .ios-widget.is-active {
+            opacity: 1; transform: scale(1.05);
+            background: #ffffff; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
 
-    .feature-card h3 { font-size: 20px; margin-bottom: 10px; }
-    .feature-card p { color: var(--text-gray); font-size: 15px; }
+        .widget-icon-box { 
+            width: 44px; height: 44px; border-radius: 12px; 
+            display: flex; align-items: center; justify-content: center; 
+            color: #fff; margin-bottom: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+        }
+        .bg-blue { background: #007aff; } .bg-green { background: #34c759; }
+        .bg-orange { background: #ff9500; } .bg-indigo { background: #5856d6; }
 
-    /* --- STATS STRIP --- */
-    .stats {
-        padding: 60px 0;
-        border-top: 1px solid var(--glass-border);
-        border-bottom: 1px solid var(--glass-border);
-        background: rgba(255,255,255,0.02);
-    }
-    .stats-container {
-        max-width: 1000px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-around;
-        text-align: center;
-        flex-wrap: wrap;
-        gap: 30px;
-    }
-    .stat-item h3 { font-size: 42px; font-weight: 800; color: #b040df; margin-bottom: 5px; }
-    .stat-item p { color: var(--text-gray); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .widget-content h3 { font-size: 18px; font-weight: 800; color: #1d1d1f; margin-bottom: 6px; }
+        .widget-content p { font-size: 13px; color: #6e6e73; font-weight: 500; line-height: 1.4; }
 
-    /* --- FOOTER --- */
-    .footer {
-        padding: 80px 20px 40px;
-        background: #020202;
-        border-top: 1px solid var(--glass-border);
-    }
-    .footer-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr 1fr;
-        gap: 40px;
-        margin-bottom: 60px;
-    }
-    .footer-brand p { color: var(--text-gray); margin-top: 15px; font-size: 14px; max-width: 300px; }
-    .footer-col h4 { margin-bottom: 20px; font-size: 16px; }
-    .footer-col ul li { margin-bottom: 10px; }
-    .footer-col a { color: var(--text-gray); font-size: 14px; }
-    .footer-col a:hover { color: #fff; }
+        .scroller-progress-container {
+            width: 100px; height: 4px; background: rgba(0,0,0,0.05); border-radius: 10px; margin: 0 auto; position: relative; overflow: hidden;
+        }
+        .scroller-progress-bar {
+            position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: var(--accent); border-radius: 10px; transition: width 0.1s ease-out;
+        }
 
-    .footer-bottom {
-        text-align: center;
-        padding-top: 40px;
-        border-top: 1px solid rgba(255,255,255,0.05);
-        color: var(--text-gray);
-        font-size: 13px;
-    }
+        /* --- WHATSAPP CTA --- */
+        .whatsapp-cta-section { 
+            max-width: 1100px; 
+            /* Margine uniformato */
+            margin: var(--common-margin) auto; 
+            text-align: center; padding: 10px 20px; 
+        }
+        .wa-btn {
+            display: inline-flex; align-items: center; gap: 15px;
+            background: #1d1d1f; border-radius: 50px;
+            padding: 20px 40px; font-size: 20px; font-weight: 700; color: #ffffff;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 10px 30px rgba(0,0,0,0.1); cursor: pointer;
+        }
+        .wa-btn:hover { transform: scale(1.05) translateY(-5px); background: #000; box-shadow: 0 20px 50px rgba(37, 211, 102, 0.3); }
+        .wa-icon { width: 28px; height: 28px; fill: var(--whatsapp-green); }
 
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-        .hero h1 { font-size: 42px; }
-        .nav-links { display: none; } /* Semplificato per demo: nasconde menu su mobile */
-        .footer-container { grid-template-columns: 1fr; text-align: center; }
-        .footer-brand p { margin: 15px auto; }
-    }
-</style>
+        /* --- CHI SIAMO SECTION --- */
+        .about-section {
+            max-width: 800px;
+            /* Margine uniformato */
+            margin: var(--common-margin) auto;
+            text-align: center;
+            padding: 0 20px;
+        }
+        .about-text {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #424245;
+            font-weight: 400;
+        }
+        .about-text strong {
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .site-footer { padding: 60px 5% 40px; font-size: 13px; color: #86868b; text-align: center; }
+
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } from { opacity: 0; transform: translateY(30px); } }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 72px; letter-spacing: -3px; }
+            .hero-section { padding-top: 18vh; min-height: 80vh; }
+            .block-title { font-size: 38px; }
+            .clean-section-container { width: 100%; padding: 40px 20px; }
+            .ios-widget { flex: 0 0 240px; }
+            .wa-btn { font-size: 18px; padding: 15px 30px; width: 90%; justify-content: center; }
+            .about-text { font-size: 18px; }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- BACKGROUND EFFECTS -->
-    <div class="background-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
+    <div class="global-bg"></div>
+    <div class="hero-vignette"></div>
 
     <!-- HEADER -->
-    <header class="header">
-        <div class="logo">Nex<span>Gen</span></div>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="#hero">Home</a></li>
-                <li><a href="#features">Servizi</a></li>
-                <li><a href="#portfolio">Progetti</a></li>
-                <li><a href="#about">Chi Siamo</a></li>
-            </ul>
-        </nav>
-        <a href="#contact" class="btn-nav">Contattaci</a>
-    </header>
+    <div id="SmartHeader">
+        <div class="header-top-row">
+            <a href="#" class="header-logo">
+                <img src="https://raw.githubusercontent.com/Supermanbatman2726/Dhdbd/refs/heads/main/IMG_0031.png" alt="QuanTech Logo">
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="announcement-bar-inner">
+            <div class="marquee-content">
+                Sconto 20% sul primo ordine <span class="dot">•</span> Assistenza Express Apple <span class="dot">•</span> Tecnologia QuanTech <span class="dot">•</span> Prenota Online in 2 Minuti <span class="dot">•</span>
+                Sconto 20% sul primo ordine <span class="dot">•</span> Assistenza Express Apple <span class="dot">•</span> Tecnologia QuanTech <span class="dot">•</span> Prenota Online in 2 Minuti <span class="dot">•</span>
+            </div>
+        </div>
+    </div>
 
-    <!-- HERO SECTION -->
-    <section class="hero" id="hero">
+    <!-- SIDE MENU -->
+    <div class="menu-overlay" onclick="toggleMenu()"></div>
+    <div class="side-menu" id="sideMenu">
+        <div class="close-btn" onclick="toggleMenu()">✕</div>
+        <ul class="menu-items">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Servizi</a></li>
+            <li><a href="#">Contatti</a></li>
+        </ul>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero-section">
         <div class="hero-content">
-            <h1>Il Futuro del<br>Digital Design.</h1>
-            <p>Creiamo esperienze web incredibili con un design moderno, veloce e ottimizzato. Porta il tuo brand al livello successivo.</p>
-            <div class="hero-btns">
-                <a href="#features" class="btn-primary">Scopri di più</a>
-                <a href="#contact" class="btn-secondary">Parla con noi</a>
+            <h1 class="hero-title">QuanTech</h1>
+            <p class="hero-desc">
+                Precisione assoluta, design minimale. 
+                L'evoluzione della riparazione tecnologica.
+            </p>
+            <div class="tp-card">
+                <div class="tp-header" style="display: flex; align-items: center; gap: 15px;">
+                    <div style="background: rgba(0, 182, 122, 0.1); width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #00b67a;">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                    </div>
+                    <div style="text-align: left;">
+                        <span style="font-size: 12px; color: #86868b; font-weight: 600; text-transform: uppercase;">Trustpilot 4.9</span>
+                        <div style="font-size: 22px; font-weight: 800; color: #1d1d1f;"><span id="reviewCounter">0</span>+ Recensioni</div>
+                    </div>
+                </div>
+                <div style="width: 100%; height: 1px; background: rgba(0,0,0,0.06);"></div>
+                <a href="https://it.trustpilot.com" target="_blank" class="tp-btn">Controlla su Trustpilot</a>
             </div>
         </div>
     </section>
 
-    <!-- STATS -->
-    <section class="stats">
-        <div class="stats-container">
-            <div class="stat-item">
-                <h3>100+</h3>
-                <p>Progetti</p>
-            </div>
-            <div class="stat-item">
-                <h3>98%</h3>
-                <p>Clienti Felici</p>
-            </div>
-            <div class="stat-item">
-                <h3>24/7</h3>
-                <p>Supporto</p>
-            </div>
-        </div>
-    </section>
+    <!-- WRAPPER CONTENUTI -->
+    <div class="scroll-content">
 
-    <!-- FEATURES -->
-    <section class="features" id="features">
-        <div class="section-title">
-            <h2>I Nostri Servizi</h2>
-            <p>Tutto ciò di cui hai bisogno per scalare online.</p>
-        </div>
-        
-        <div class="features-grid">
-            <!-- Card 1 -->
-            <div class="feature-card">
-                <div class="icon-box">🎨</div>
-                <h3>UI/UX Design</h3>
-                <p>Interfacce moderne, intuitive e bellissime da vedere che convertono i visitatori in clienti.</p>
+        <!-- SEZIONE: PERCHÉ SCEGLIERCI -->
+        <section class="clean-section-container" id="percheSceglierci">
+            <h2 class="block-title">Perché Sceglierci</h2>
+            <span class="block-tag">L'Eccellenza QuanTech</span>
+            
+            <div class="iphone-widgets-container" id="widgetContainer">
+                <div class="ios-widget">
+                    <div class="widget-icon-box bg-blue">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    </div>
+                    <div class="widget-content">
+                        <h3>Velocità Flash</h3>
+                        <p>Riparazioni certificate in meno di 60 minuti. Il tempo è il vero lusso.</p>
+                    </div>
+                </div>
+                <div class="ios-widget">
+                    <div class="widget-icon-box bg-green">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <div class="widget-content">
+                        <h3>Garanzia 12M</h3>
+                        <p>Copertura totale su ogni componente. La qualità QuanTech è certificata.</p>
+                    </div>
+                </div>
+                <div class="ios-widget">
+                    <div class="widget-icon-box bg-orange">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9z"></path></svg>
+                    </div>
+                    <div class="widget-content">
+                        <h3>Parti OEM</h3>
+                        <p>Utilizziamo solo componenti originali per non intaccare il valore del device.</p>
+                    </div>
+                </div>
+                <div class="ios-widget">
+                    <div class="widget-icon-box bg-indigo">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="9" y1="9" x2="9" y2="15"></line><line x1="15" y1="9" x2="15" y2="15"></line></svg>
+                    </div>
+                    <div class="widget-content">
+                        <h3>Diagnostica AI</h3>
+                        <p>Analisi computerizzata gratuita per scoprire guasti latenti o futuri.</p>
+                    </div>
+                </div>
             </div>
-            <!-- Card 2 -->
-            <div class="feature-card">
-                <div class="icon-box">⚡</div>
-                <h3>Sviluppo Web</h3>
-                <p>Codice pulito, siti ultra-veloci e ottimizzati per i motori di ricerca (SEO).</p>
-            </div>
-            <!-- Card 3 -->
-            <div class="feature-card">
-                <div class="icon-box">📱</div>
-                <h3>App Mobile</h3>
-                <p>Sviluppo di applicazioni native e cross-platform per iOS e Android.</p>
-            </div>
-        </div>
-    </section>
 
-    <!-- FOOTER -->
-    <footer class="footer" id="contact">
-        <div class="footer-container">
-            <div class="footer-brand">
-                <div class="logo">Nex<span>Gen</span></div>
-                <p>Innovazione digitale per brand che vogliono distinguersi. Costruiamo il domani, oggi.</p>
+            <div class="scroller-progress-container">
+                <div class="scroller-progress-bar" id="widgetProgress"></div>
             </div>
-            <div class="footer-col">
-                <h4>Azienda</h4>
-                <ul>
-                    <li><a href="#">Chi siamo</a></li>
-                    <li><a href="#">Carriere</a></li>
-                    <li><a href="#">Blog</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Servizi</h4>
-                <ul>
-                    <li><a href="#">Web Design</a></li>
-                    <li><a href="#">Marketing</a></li>
-                    <li><a href="#">Analisi</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Legale</h4>
-                <ul>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Termini</a></li>
-                    <li><a href="#">Cookie</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            &copy; 2024 NexGen Digital. Tutti i diritti riservati.
-        </div>
-    </footer>
+        </section>
 
+        <!-- WHATSAPP CTA -->
+        <section class="whatsapp-cta-section">
+            <a href="https://wa.me/390000000000" class="wa-btn" target="_blank">
+                <svg class="wa-icon" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-5.5-2.8-23.2-8.5-44.2-27.1-16.4-14.6-27.4-32.7-30.6-38.2-3.2-5.6-.3-8.6 2.4-11.3 2.5-2.4 5.5-6.5 8.3-9.7 2.8-3.3 3.7-5.6 5.5-9.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 13.2 5.8 23.5 9.2 31.5 11.8 13.3 4.2 25.4 3.6 35 2.2 10.7-1.5 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+                WhatsApp Assistenza
+            </a>
+        </section>
+
+        <!-- SEZIONE: CHI SIAMO -->
+        <section class="about-section">
+            <div class="clean-section-container">
+                <h2 class="block-title">Chi Siamo</h2>
+                <span class="block-tag">La nostra missione</span>
+                <p class="about-text">
+                    Nati dalla passione per l'eccellenza, <strong>QuanTech</strong> è il laboratorio di riferimento per chi non accetta compromessi. Combiniamo l'artigianalità della riparazione manuale con le tecnologie di diagnostica più avanzate al mondo. Ogni dispositivo che entra in QuanTech viene trattato come un'opera d'ingegneria unica, garantendo risultati che vanno oltre la semplice riparazione: restituiamo vita alla tua tecnologia.
+                </p>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <div class="copyright">&copy; 2024 White Glass Engine. Eccellenza QuanTech.</div>
+        </footer>
+
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.querySelector('.menu-overlay');
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        const container = document.getElementById('widgetContainer');
+        const progressBar = document.getElementById('widgetProgress');
+        const widgets = document.querySelectorAll('.ios-widget');
+
+        if (container) {
+            container.addEventListener('scroll', () => {
+                const maxScroll = container.scrollWidth - container.clientWidth;
+                const percentage = (container.scrollLeft / maxScroll) * 100;
+                progressBar.style.width = Math.min(percentage, 100) + '%';
+            });
+        }
+
+        const section = document.getElementById('percheSceglierci');
+        if (section) {
+            const sectionObserver = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    widgets.forEach((widget, index) => {
+                        setTimeout(() => {
+                            widget.classList.add('is-active');
+                        }, index * 200);
+                    });
+                    sectionObserver.unobserve(section); 
+                }
+            }, { threshold: 0.3 });
+            sectionObserver.observe(section);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const counterElement = document.getElementById("reviewCounter");
+            if (counterElement) {
+                const target = 142; 
+                const duration = 2000; 
+                const frameDuration = 1000 / 60; 
+                const totalFrames = Math.round(duration / frameDuration); 
+                let frame = 0;
+                const easeOutQuad = t => t * (2 - t);
+                const counter = setInterval(() => {
+                    frame++;
+                    const progress = easeOutQuad(frame / totalFrames);
+                    const currentCount = Math.round(target * progress);
+                    if (parseInt(counterElement.innerText) !== currentCount) {
+                        counterElement.innerText = currentCount;
+                    }
+                    if (frame === totalFrames) { clearInterval(counter); counterElement.innerText = target; }
+                }, frameDuration);
+            }
+        });
+    </script>
 </body>
 </html>
-
 
