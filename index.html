@@ -2,7 +2,8 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- FIX: Aggiunto viewport-fit=cover per gestire notch e barre di sistema -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>QuanTech | Master Repair Lab</title>
     
     <!-- Fonts Premium: Inter Tight & Space Grotesk -->
@@ -43,65 +44,73 @@
         /* --- BASE RESET & GRAIN --- */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
         
-        /* FIX SCROLL ORIZZONTALE - LIVELLO 1 */
+        /* FIX SCROLL & OVERSCROLL - CORREZIONE PRINCIPALE */
         html {
             width: 100%;
-            overflow-x: hidden;
-            background-color: #000;
-            overscroll-behavior-x: none; /* Disabilita overscroll laterale */
+            height: 100%; /* Forza altezza piena */
+            background-color: #111; /* Colore di fondo scuro per evitare flash bianchi */
+            
+            /* Disabilita il "rimbalzo" (rubber-banding) su mobile */
+            overscroll-behavior: none; 
+            behavior: smooth; /* Smooth scroll nativo */
         }
 
         body { 
             color: var(--text-main); 
             font-family: 'Inter Tight', sans-serif; 
             width: 100%;
-            overflow-x: hidden;
+            min-height: 100%;
             position: relative;
+            background-color: transparent; /* Lascia vedere il global-bg */
+            overflow-x: hidden;
         }
 
-        /* WRAPPER DI SICUREZZA - LIVELLO 2 */
+        /* WRAPPER DI SICUREZZA */
         .main-wrapper {
             width: 100%;
-            overflow-x: hidden; /* Taglia tutto ciò che esce lateralmente */
+            overflow-x: hidden; 
             position: relative;
             display: flex;
             flex-direction: column;
-            z-index: 1; /* Assicura che il contenuto stia sopra lo sfondo */
+            z-index: 2; /* Sopra lo sfondo */
         }
         
         h1, h2, h3 { letter-spacing: -0.03em; }
         .font-tech { font-family: 'Space Grotesk', sans-serif; }
 
-        /* NOISE OVERLAY - FIX BUG BORDI */
+        /* NOISE OVERLAY - FISSO SULLO SCHERMO */
         .noise-overlay {
             position: fixed; 
-            top: -10vh; left: -10vw; /* Sposta origine fuori visuale */
-            width: 120vw; height: 120vh; /* Estendi oltre viewport */
-            pointer-events: none; z-index: 9999;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none; 
+            z-index: 9999; /* Sopra tutto */
             opacity: 0.04;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
         }
 
-        /* --- SFONDO ORIGINALE SCURITO - FIX BUG BORDI --- */
+        /* --- SFONDO FISSO - CORRETTO --- */
         .global-bg {
             position: fixed; 
-            top: -10vh; left: -10vw; 
-            width: 120vw; height: 120vh; 
+            top: 0; left: 0; 
+            width: 100vw; height: 100vh; 
             z-index: -2; 
             background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop'); 
-            background-size: cover; background-position: center; 
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;
             filter: brightness(0.65); 
-            transform: scale(1.0); /* Scale ridotto leggermente dato l'oversize */
             will-change: transform;
         }
         
         /* FIX VIGNETTE BUG */
         .hero-vignette { 
             position: fixed; 
-            top: -10vh; left: -10vw; 
-            width: 120vw; height: 120vh; 
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 40%, rgba(255,255,255,0.7) 85%, rgba(255,255,255,1) 100%);
-            z-index: -1; pointer-events: none; 
+            top: 0; left: 0; 
+            width: 100vw; height: 100vh; 
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 40%, rgba(255,255,255,0.7) 85%, rgba(255,255,255,1) 100%);
+            z-index: -1; 
+            pointer-events: none; 
         }
 
         /* --- SMART HEADER INTEGRATO --- */
@@ -190,7 +199,6 @@
             min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
             padding: 157px 20px 80px; 
             position: relative;
-            /* overflow: hidden; Rimosso per permettere al main-wrapper di gestire */
         }
 
         .hero-badge {
@@ -251,16 +259,16 @@
         .hero-btn.btn-outline:hover { background: #fff; transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255,255,255,0.3); }
 
 
-        /* HERO GOOGLE CARD - High Impact Version */
+        /* HERO GOOGLE CARD */
         .hero-google-card {
-            background: #ffffff; /* Solid White for impact */
+            background: #ffffff; 
             border: 1px solid rgba(0, 0, 0, 0.08);
-            padding: 16px 32px; /* Slightly larger padding */
+            padding: 16px 32px; 
             border-radius: 100px; display: inline-flex; align-items: center; gap: 16px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.1); /* Deep Shadow */
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.1); 
             transition: transform 0.3s; margin-bottom: 40px;
             opacity: 0; animation: fadeUp 1s 0.6s forwards; cursor: pointer; text-decoration: none;
-            transform: scale(1.02); /* Slightly larger by default */
+            transform: scale(1.02); 
         }
         .hero-google-card:hover { transform: translateY(-4px) scale(1.05); }
         
@@ -303,7 +311,7 @@
             padding-left: 20px; padding-right: 20px;
         }
 
-        .center-header { text-align: center; width: 100%; margin-bottom: 80px; /* Più spazio sotto il titolo */ }
+        .center-header { text-align: center; width: 100%; margin-bottom: 80px; }
         .section-glass-header {
             background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); padding: 18px 40px;
             border-radius: 100px; display: inline-block; border: 1px solid rgba(255,255,255,0.6);
@@ -339,10 +347,8 @@
         .steps-connector { position: absolute; top: 30px; left: 60px; right: 60px; height: 2px; background: rgba(0,0,0,0.06); z-index: 0; }
         .step-single { position: relative; z-index: 1; text-align: center; flex: 1; opacity: 0.5; transform: translateY(10px); transition: all 0.6s ease; }
         
-        /* Step Active State */
         .step-single.step-active { opacity: 1; transform: translateY(0); }
 
-        /* Step Circle Responsive */
         .step-circle {
             width: 60px; height: 60px; background: #fff; border: 4px solid #F5F5F7; color: #111; 
             border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;
@@ -350,11 +356,11 @@
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
-        /* Active State for Scroll Interaction */
+        
         .step-single.step-active .step-circle {
             border-color: var(--accent); 
-            background: #fff; /* White background */
-            color: var(--accent); /* Text becomes blue */
+            background: #fff; 
+            color: var(--accent); 
             transform: scale(1.15);
             box-shadow: 0 0 30px rgba(0, 113, 227, 0.3);
         }
@@ -363,7 +369,7 @@
         .step-single h4 { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: #111; }
         .step-single p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; padding: 0 15px; }
 
-        /* --- REVIEWS (7 ITEMS) --- */
+        /* --- REVIEWS --- */
         .reviews-scroller {
             display: flex; gap: 24px; overflow-x: auto; padding: 10px 10px 50px; 
             scroll-snap-type: x mandatory; cursor: grab; scrollbar-width: none;
@@ -443,7 +449,7 @@
 
         /* RESPONSIVE */
         @media (max-width: 1024px) { 
-            :root { --section-gap: 90px; } /* Fluid & Clean Mobile Margin */
+            :root { --section-gap: 90px; }
             .nav-main-row { padding: 8px 15px; } 
             .nav-links, .cta-button.desktop-only { display: none; } 
             .smart-nav { width: 92%; }
@@ -457,8 +463,8 @@
             .process-glass-box { padding: 40px; }
             .cta-title { font-size: 36px; }
             .review-glass-card { min-width: 85vw; }
-            .hero-actions { gap: 15px; } /* Meno gap su mobile */
-            .hero-btn { min-width: 100%; } /* Pulsanti full width su mobile */
+            .hero-actions { gap: 15px; }
+            .hero-btn { min-width: 100%; }
         }
     </style>
 </head>
@@ -534,7 +540,6 @@
             <p>Design minimale. Componenti originali. Velocità sorprendente.<br>Restituiamo vita ai tuoi dispositivi in meno di 60 minuti.</p>
             
             <div class="hero-actions">
-                <!-- HERO CTA UNIFICATI -->
                 <a href="https://wa.me/393510000000?text=Ciao%20QuanTech,%20vorrei%20informazioni" class="hero-btn btn-wa" target="_blank">
                     <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
                     Prenota su WhatsApp
@@ -591,7 +596,6 @@
                     <span class="brand-item">Oppo</span>
                     <span class="brand-item">Google</span>
                     <span class="brand-item">Sony</span>
-                    <!-- Repeat for infinite scroll -->
                     <span class="brand-item">Apple</span>
                     <span class="brand-item">Samsung</span>
                     <span class="brand-item">Xiaomi</span>
@@ -643,7 +647,6 @@
                     <span class="brand-item" style="color: #111;">Ricambi Originali</span>
                     <span class="brand-item" style="color: var(--accent);">Tecnici Certificati</span>
                     <span class="brand-item" style="color: #111;">Velocità</span>
-                    <!-- Repeat -->
                     <span class="brand-item" style="color: var(--accent);">Garanzia 12 Mesi</span>
                     <span class="brand-item" style="color: #111;">Ricambi Originali</span>
                     <span class="brand-item" style="color: var(--accent);">Tecnici Certificati</span>
@@ -684,7 +687,7 @@
                 </div>
             </section>
 
-            <!-- REVIEWS (7 ITEMS) -->
+            <!-- REVIEWS -->
             <section class="section-padding" id="reviews">
                 <div class="center-header reveal">
                     <div class="section-glass-header">
@@ -693,7 +696,6 @@
                     </div>
                 </div>
 
-                <!-- Extra WhatsApp CTA in Reviews -->
                 <div style="text-align: center; margin-bottom: 30px;">
                     <a href="https://wa.me/393510000000?text=Ciao%20QuanTech,%20ho%20letto%20le%20recensioni" class="cta-button" target="_blank" style="padding: 12px 28px; background: #fff; color: var(--whatsapp); border: 1px solid var(--whatsapp);">
                         <svg viewBox="0 0 24 24" style="fill: var(--whatsapp);"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
@@ -771,109 +773,12 @@
                         </div>
                         <p class="r-text">"Onestà rara. Risolto problema al connettore in 20 minuti senza sostituire pezzi inutili. Competenza e trasparenza al top."</p>
                     </div>
-                    <!-- Review 4 -->
-                    <div class="review-glass-card tilt-card">
-                        <div class="r-header">
-                            <div class="r-user">
-                                <div class="r-avatar">G</div>
-                                <div>
-                                    <div class="r-name">Giulia M.</div>
-                                    <span class="r-meta">2 giorni fa</span>
-                                </div>
-                            </div>
-                            <div class="r-verified">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
-                            </div>
-                        </div>
-                        <div class="r-stars">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        </div>
-                        <p class="r-text">"Salvati 4 anni di foto dal mio iPhone che non si accendeva più. Non smetterò mai di ringraziarvi! Maghi del recupero dati."</p>
-                    </div>
-                    <!-- Review 5 -->
-                    <div class="review-glass-card tilt-card">
-                        <div class="r-header">
-                            <div class="r-user">
-                                <div class="r-avatar">L</div>
-                                <div>
-                                    <div class="r-name">Luca Rossi</div>
-                                    <span class="r-meta">1 settimana fa</span>
-                                </div>
-                            </div>
-                            <div class="r-verified">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
-                            </div>
-                        </div>
-                        <div class="r-stars">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        </div>
-                        <p class="r-text">"Riparazione display iPad Air perfetta. Nemmeno un graffio e tempi rispettati al minuto. Professionalità d'altri tempi."</p>
-                    </div>
-                    <!-- Review 6 -->
-                    <div class="review-glass-card tilt-card">
-                        <div class="r-header">
-                            <div class="r-user">
-                                <div class="r-avatar">A</div>
-                                <div>
-                                    <div class="r-name">Alessandro B.</div>
-                                    <span class="r-meta">3 giorni fa</span>
-                                </div>
-                            </div>
-                            <div class="r-verified">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
-                            </div>
-                        </div>
-                        <div class="r-stars">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        </div>
-                        <p class="r-text">"Il mio MacBook Pro aveva preso acqua. Apple mi aveva detto 'da buttare'. Loro l'hanno riparato in 48 ore a un terzo del prezzo."</p>
-                    </div>
-                    <!-- Review 7 -->
-                    <div class="review-glass-card tilt-card">
-                        <div class="r-header">
-                            <div class="r-user">
-                                <div class="r-avatar">F</div>
-                                <div>
-                                    <div class="r-name">Francesca T.</div>
-                                    <span class="r-meta">5 giorni fa</span>
-                                </div>
-                            </div>
-                            <div class="r-verified">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
-                            </div>
-                        </div>
-                        <div class="r-stars">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        </div>
-                        <p class="r-text">"Sostituzione batteria e connettore di ricarica. Telefono tornato come nuovo. Super consigliati per onestà e velocità."</p>
-                    </div>
                 </div>
             </section>
 
             <!-- SEPARATOR STRIP 2 -->
             <div class="marquee-section reveal" style="transform: rotate(1deg); margin: 60px 0; background: #111;">
                 <div class="marquee-content">
-                    <span class="brand-item" style="color: #fff;">Privacy Totale</span>
-                    <span class="brand-item" style="color: #888;">Nessuna Perdita Dati</span>
-                    <span class="brand-item" style="color: #fff;">Check-up Gratuito</span>
-                    <span class="brand-item" style="color: #888;">Qualità Premium</span>
-                    <!-- Repeat -->
                     <span class="brand-item" style="color: #fff;">Privacy Totale</span>
                     <span class="brand-item" style="color: #888;">Nessuna Perdita Dati</span>
                     <span class="brand-item" style="color: #fff;">Check-up Gratuito</span>
@@ -975,7 +880,7 @@
                     &copy; 2024 QuanTech. Tutti i diritti riservati.
                 </div>
             </footer>
-        </div> <!-- End of main-wrapper -->
+        </div>
 
     <script>
         // Custom Smooth Scroll Function
@@ -984,15 +889,13 @@
             const target = document.querySelector(targetId);
             if (!target) return;
 
-            // Offset per l'header ridotto per avvicinamento (100px invece di 140px)
             const headerOffset = 100;
             const elementPosition = target.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-            // Custom duration and easing
             const startPosition = window.pageYOffset;
             const distance = offsetPosition - startPosition;
-            const duration = 1200; // 1200ms = 1.2 secondi (più lento e fluido)
+            const duration = 1200; 
             let start = null;
 
             function animation(currentTime) {
@@ -1003,7 +906,6 @@
                 if (timeElapsed < duration) requestAnimationFrame(animation);
             }
 
-            // Easing function (easeInOutCubic)
             function ease(t, b, c, d) {
                 t /= d / 2;
                 if (t < 1) return c / 2 * t * t * t + b;
@@ -1044,13 +946,12 @@
         const processObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Accendi i numeri in sequenza (uniforme)
                     steps.forEach((step, index) => {
                         setTimeout(() => {
                             step.classList.add('step-active');
-                        }, index * 400); // 400ms di delay tra uno e l'altro
+                        }, index * 400); 
                     });
-                    processObserver.unobserve(entry.target); // Esegui solo una volta
+                    processObserver.unobserve(entry.target); 
                 }
             });
         }, { threshold: 0.4 });
@@ -1117,13 +1018,13 @@
         tiltCards.forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left; // x position within the element.
-                const y = e.clientY - rect.top;  // y position within the element.
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
                 
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
                 
-                const rotateX = ((y - centerY) / centerY) * -10; // Max rotation deg
+                const rotateX = ((y - centerY) / centerY) * -10;
                 const rotateY = ((x - centerX) / centerX) * 10;
 
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
@@ -1137,5 +1038,4 @@
     </script>
 </body>
 </html>
-
 
