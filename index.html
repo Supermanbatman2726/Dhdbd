@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>QuanTech | Master Repair Lab</title>
     
     <!-- Fonts Premium: Inter Tight & Space Grotesk -->
@@ -21,7 +21,7 @@
             --whatsapp-hover: #1da851;
             
             /* Glass System V3 (Ultra Fidelity) */
-            --glass-bg: rgba(255, 255, 255, 0.90); /* Più opaco per leggibilità */
+            --glass-bg: rgba(255, 255, 255, 0.90);
             --glass-bg-hover: rgba(255, 255, 255, 0.98);
             --glass-border: 1px solid rgba(255, 255, 255, 0.6);
             --glass-blur: blur(40px) saturate(180%);
@@ -42,12 +42,30 @@
 
         /* --- BASE RESET & GRAIN --- */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-        html { scroll-behavior: smooth; }
+        
+        /* FIX SCROLL ORIZZONTALE - LIVELLO 1 */
+        html {
+            width: 100%;
+            overflow-x: hidden;
+            background-color: #000;
+            overscroll-behavior-x: none; /* Disabilita overscroll laterale */
+        }
+
         body { 
             color: var(--text-main); 
             font-family: 'Inter Tight', sans-serif; 
-            overflow-x: hidden; 
-            background-color: #000; 
+            width: 100%;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* WRAPPER DI SICUREZZA - LIVELLO 2 */
+        .main-wrapper {
+            width: 100%;
+            overflow-x: hidden; /* Taglia tutto ciò che esce lateralmente */
+            position: relative;
+            display: flex;
+            flex-direction: column;
         }
         
         h1, h2, h3 { letter-spacing: -0.03em; }
@@ -55,7 +73,7 @@
 
         /* NOISE OVERLAY */
         .noise-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 9999;
             opacity: 0.04;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
         }
@@ -67,6 +85,7 @@
             background-size: cover; background-position: center; 
             filter: brightness(0.65); 
             transform: scale(1.02);
+            will-change: transform;
         }
         
         .hero-vignette { 
@@ -136,6 +155,7 @@
             padding: 10px 18px; border-radius: 100px; color: #111; font-size: 13px; font-weight: 600; text-decoration: none;
             transition: background 0.2s;
             white-space: nowrap; 
+            cursor: pointer;
         }
         .nav-link:hover { background: rgba(0,0,0,0.06); }
         .nav-link.active { background: #111; color: #fff; }
@@ -158,9 +178,9 @@
         /* --- HERO SECTION --- */
         .hero {
             min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-            /* Adjusted top padding: 160px - 3px = 157px */
             padding: 157px 20px 80px; 
             position: relative;
+            /* overflow: hidden; Rimosso per permettere al main-wrapper di gestire */
         }
 
         .hero-badge {
@@ -206,6 +226,7 @@
             transition: 0.3s;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             box-sizing: border-box;
+            cursor: pointer;
         }
 
         .hero-btn.btn-wa {
@@ -256,12 +277,13 @@
             padding: 30px 0; background: rgba(255,255,255,0.7); backdrop-filter: blur(20px); 
             border-top: 1px solid rgba(255,255,255,0.5); border-bottom: 1px solid rgba(255,255,255,0.5); 
             overflow: hidden; white-space: nowrap; margin-top: 40px;
+            width: 100%; 
         }
         .marquee-content { display: inline-flex; gap: 100px; animation: scroll 50s linear infinite; align-items: center; }
         .brand-item { font-size: 22px; font-weight: 800; color: rgba(0,0,0,0.25); font-family: 'Space Grotesk', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
 
         /* --- SEZIONI LAYOUT --- */
-        .content-layer { position: relative; z-index: 10; }
+        .content-layer { position: relative; z-index: 10; width: 100%; }
         
         .section-padding { 
             padding-top: var(--section-gap); 
@@ -444,16 +466,16 @@
         <nav class="smart-nav">
             <!-- Row 1: Navigazione -->
             <div class="nav-main-row">
-                <a href="#hero" class="nav-logo">
+                <a href="#hero" class="nav-logo" onclick="smoothScroll(event, '#hero')">
                     <img src="https://raw.githubusercontent.com/Supermanbatman2726/Dhdbd/refs/heads/main/IMG_0031.png" alt="Logo">
                     QuanTech
                 </a>
                 <div class="nav-links">
-                    <a href="#hero" class="nav-link active">Home</a>
-                    <a href="#features" class="nav-link">Servizi</a>
-                    <a href="#process" class="nav-link">Processo</a>
-                    <a href="#reviews" class="nav-link">Clienti</a>
-                    <a href="#faq" class="nav-link">FAQ</a>
+                    <a href="#hero" class="nav-link active" onclick="smoothScroll(event, '#hero')">Home</a>
+                    <a href="#features" class="nav-link" onclick="smoothScroll(event, '#features')">Servizi</a>
+                    <a href="#process" class="nav-link" onclick="smoothScroll(event, '#process')">Processo</a>
+                    <a href="#reviews" class="nav-link" onclick="smoothScroll(event, '#reviews')">Clienti</a>
+                    <a href="#faq" class="nav-link" onclick="smoothScroll(event, '#faq')">FAQ</a>
                 </div>
                 <div style="display:flex; align-items:center;">
                     <a href="https://wa.me/393510000000?text=Ciao%20QuanTech,%20vorrei%20prenotare%20una%20riparazione" class="cta-button desktop-only" target="_blank">
@@ -481,468 +503,507 @@
         </nav>
     </div>
 
-    <!-- MENU MOBILE -->
-    <div class="fs-menu" id="fsMenu">
-        <a href="#hero" class="fs-link" onclick="toggleMenu()" style="transition-delay: 0.1s">Home</a>
-        <a href="#features" class="fs-link" onclick="toggleMenu()" style="transition-delay: 0.2s">Servizi</a>
-        <a href="#process" class="fs-link" onclick="toggleMenu()" style="transition-delay: 0.3s">Come Funziona</a>
-        <a href="#reviews" class="fs-link" onclick="toggleMenu()" style="transition-delay: 0.4s">Recensioni</a>
-        <a href="#faq" class="fs-link" onclick="toggleMenu()" style="transition-delay: 0.45s">FAQ</a>
-        <a href="https://wa.me/393510000000?text=Ciao%20QuanTech" class="fs-link" onclick="toggleMenu()" target="_blank" style="color: var(--whatsapp); transition-delay: 0.5s">Scrivici su WhatsApp</a>
-        <div style="margin-top: 40px; cursor: pointer; font-weight: 600;" onclick="toggleMenu()">✕ Chiudi</div>
-    </div>
+    <!-- WRAPPER DI SICUREZZA PER TUTTO IL CONTENUTO -->
+    <div class="main-wrapper">
 
-    <!-- HERO SECTION -->
-    <section class="hero" id="hero">
-        <div class="hero-badge">Nuova Apertura</div>
-        <h1>Il futuro della<br>riparazione tech.</h1>
-        <p>Design minimale. Componenti originali. Velocità sorprendente.<br>Restituiamo vita ai tuoi dispositivi in meno di 60 minuti.</p>
-        
-        <div class="hero-actions">
-            <!-- HERO CTA UNIFICATI -->
-            <a href="https://wa.me/393510000000?text=Ciao%20QuanTech,%20vorrei%20informazioni" class="hero-btn btn-wa" target="_blank">
-                <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                Scrivici su WhatsApp
-            </a>
-            <a href="#features" class="hero-btn btn-outline">Scopri i Servizi</a>
+        <!-- MENU MOBILE -->
+        <div class="fs-menu" id="fsMenu">
+            <a href="#hero" class="fs-link" onclick="toggleMenu(); smoothScroll(event, '#hero');">Home</a>
+            <a href="#features" class="fs-link" onclick="toggleMenu(); smoothScroll(event, '#features');">Servizi</a>
+            <a href="#process" class="fs-link" onclick="toggleMenu(); smoothScroll(event, '#process');">Come Funziona</a>
+            <a href="#reviews" class="fs-link" onclick="toggleMenu(); smoothScroll(event, '#reviews');">Recensioni</a>
+            <a href="#faq" class="fs-link" onclick="toggleMenu(); smoothScroll(event, '#faq');">FAQ</a>
+            <a href="https://wa.me/393510000000?text=Ciao%20QuanTech" class="fs-link" onclick="toggleMenu()" target="_blank" style="color: var(--whatsapp); transition-delay: 0.5s">Scrivici su WhatsApp</a>
+            <div style="margin-top: 40px; cursor: pointer; font-weight: 600;" onclick="toggleMenu()">✕ Chiudi</div>
         </div>
 
-        <!-- GOOGLE CARD -->
-        <a href="https://www.google.com/maps" target="_blank" style="text-decoration:none;">
-            <div class="hero-google-card">
-                <div class="g-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                </div>
-                <div class="g-text">
-                    <div class="g-stars">
-                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                    </div>
-                    <div class="g-info">Excellent <span class="g-score">5.0 / 5.0</span></div>
-                </div>
-            </div>
-        </a>
-
-        <!-- DASHBOARD STATS -->
-        <div class="glass-dashboard">
-            <div class="stat-item">
-                <span class="stat-val" data-target="20">0</span>
-                <span class="stat-label">Minuti Attesa Media</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-val" data-target="184">0</span>
-                <span class="stat-label">Recensioni 5 Stelle</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-val">12</span>
-                <span class="stat-label">Mesi Garanzia</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- CONTENT LAYER -->
-    <div class="content-layer">
-
-        <!-- MARQUEE BRANDS STRIP -->
-        <div class="marquee-section reveal">
-            <div class="marquee-content">
-                <span class="brand-item">Apple</span>
-                <span class="brand-item">Samsung</span>
-                <span class="brand-item">Xiaomi</span>
-                <span class="brand-item">Huawei</span>
-                <span class="brand-item">Oppo</span>
-                <span class="brand-item">Google</span>
-                <span class="brand-item">Sony</span>
-                <!-- Repeat for infinite scroll -->
-                <span class="brand-item">Apple</span>
-                <span class="brand-item">Samsung</span>
-                <span class="brand-item">Xiaomi</span>
-                <span class="brand-item">Huawei</span>
-                <span class="brand-item">Oppo</span>
-                <span class="brand-item">Google</span>
-                <span class="brand-item">Sony</span>
-            </div>
-        </div>
-        
-        <!-- FEATURES -->
-        <section class="section-padding" id="features">
-            <div class="center-header reveal">
-                <div class="section-glass-header">
-                    <span class="section-tag">Perché Sceglierci</span>
-                    <h2 class="section-title">Eccellenza tecnica.</h2>
-                </div>
-            </div>
+        <!-- HERO SECTION -->
+        <section class="hero" id="hero">
+            <div class="hero-badge">Nuova Apertura</div>
+            <h1>Il futuro della<br>riparazione tech.</h1>
+            <p>Design minimale. Componenti originali. Velocità sorprendente.<br>Restituiamo vita ai tuoi dispositivi in meno di 60 minuti.</p>
             
-            <div class="features-grid">
-                <div class="feature-card tilt-card reveal">
-                    <div class="feature-icon-circle">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M2 12h20"></path></svg>
+            <div class="hero-actions">
+                <!-- HERO CTA UNIFICATI -->
+                <a href="https://wa.me/393510000000?text=Ciao%20QuanTech,%20vorrei%20informazioni" class="hero-btn btn-wa" target="_blank">
+                    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                    Scrivici su WhatsApp
+                </a>
+                <a href="#features" class="hero-btn btn-outline" onclick="smoothScroll(event, '#features')">Scopri i Servizi</a>
+            </div>
+
+            <!-- GOOGLE CARD -->
+            <a href="https://www.google.com/maps" target="_blank" style="text-decoration:none;">
+                <div class="hero-google-card">
+                    <div class="g-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                     </div>
-                    <h3>Diagnostica Laser</h3>
-                    <p>Strumenti di precisione per identificare micro-danni invisibili a occhio nudo. La cura è nei dettagli.</p>
+                    <div class="g-text">
+                        <div class="g-stars">
+                            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        </div>
+                        <div class="g-info">Excellent <span class="g-score">5.0 / 5.0</span></div>
+                    </div>
                 </div>
-                <div class="feature-card tilt-card reveal" style="transition-delay: 0.1s">
-                    <div class="feature-icon-circle">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-                    </div>
-                    <h3>Componenti OEM</h3>
-                    <p>Solo parti originali o certificate. Il tuo schermo avrà gli stessi colori vividi, la tua batteria la stessa durata.</p>
+            </a>
+
+            <!-- DASHBOARD STATS -->
+            <div class="glass-dashboard">
+                <div class="stat-item">
+                    <span class="stat-val" data-target="20">0</span>
+                    <span class="stat-label">Minuti Attesa Media</span>
                 </div>
-                <div class="feature-card tilt-card reveal" style="transition-delay: 0.2s">
-                    <div class="feature-icon-circle">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    </div>
-                    <h3>Riparazione Express</h3>
-                    <p>Il 90% delle riparazioni avviene in meno di un'ora. Goditi un caffè nella nostra area relax mentre aspetti.</p>
+                <div class="stat-item">
+                    <span class="stat-val" data-target="184">0</span>
+                    <span class="stat-label">Recensioni 5 Stelle</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-val">12</span>
+                    <span class="stat-label">Mesi Garanzia</span>
                 </div>
             </div>
         </section>
 
-        <!-- SEPARATOR STRIP 1 -->
-        <div class="marquee-section reveal" style="transform: rotate(-1deg); margin: 60px 0;">
-            <div class="marquee-content">
-                <span class="brand-item" style="color: var(--accent);">Garanzia 12 Mesi</span>
-                <span class="brand-item" style="color: #111;">Ricambi Originali</span>
-                <span class="brand-item" style="color: var(--accent);">Tecnici Certificati</span>
-                <span class="brand-item" style="color: #111;">Velocità</span>
-                <!-- Repeat -->
-                 <span class="brand-item" style="color: var(--accent);">Garanzia 12 Mesi</span>
-                <span class="brand-item" style="color: #111;">Ricambi Originali</span>
-                <span class="brand-item" style="color: var(--accent);">Tecnici Certificati</span>
-                <span class="brand-item" style="color: #111;">Velocità</span>
-                 <span class="brand-item" style="color: var(--accent);">Garanzia 12 Mesi</span>
-                <span class="brand-item" style="color: #111;">Ricambi Originali</span>
-                <span class="brand-item" style="color: var(--accent);">Tecnici Certificati</span>
-                <span class="brand-item" style="color: #111;">Velocità</span>
-            </div>
-        </div>
+        <!-- CONTENT LAYER -->
+        <div class="content-layer">
 
-        <!-- PROCESS -->
-        <section class="section-padding" id="process">
-            <div class="process-glass-box reveal">
-                <div class="center-header" style="margin-bottom: 40px;">
-                    <span class="section-tag">Il Processo</span>
-                    <h2 class="section-title">Semplice, in 3 step.</h2>
+            <!-- MARQUEE BRANDS STRIP -->
+            <div class="marquee-section reveal">
+                <div class="marquee-content">
+                    <span class="brand-item">Apple</span>
+                    <span class="brand-item">Samsung</span>
+                    <span class="brand-item">Xiaomi</span>
+                    <span class="brand-item">Huawei</span>
+                    <span class="brand-item">Oppo</span>
+                    <span class="brand-item">Google</span>
+                    <span class="brand-item">Sony</span>
+                    <!-- Repeat for infinite scroll -->
+                    <span class="brand-item">Apple</span>
+                    <span class="brand-item">Samsung</span>
+                    <span class="brand-item">Xiaomi</span>
+                    <span class="brand-item">Huawei</span>
+                    <span class="brand-item">Oppo</span>
+                    <span class="brand-item">Google</span>
+                    <span class="brand-item">Sony</span>
+                </div>
+            </div>
+            
+            <!-- FEATURES -->
+            <section class="section-padding" id="features">
+                <div class="center-header reveal">
+                    <div class="section-glass-header">
+                        <span class="section-tag">Perché Sceglierci</span>
+                        <h2 class="section-title">Eccellenza tecnica.</h2>
+                    </div>
                 </div>
                 
-                <div class="steps-wrapper">
-                    <div class="steps-connector"></div>
-                    <div class="step-single">
-                        <div class="step-circle">1</div>
-                        <h4>Prenota o Passa</h4>
-                        <p>Prenota online per priorità o passa in negozio per una diagnosi.</p>
+                <div class="features-grid">
+                    <div class="feature-card tilt-card reveal">
+                        <div class="feature-icon-circle">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M2 12h20"></path></svg>
+                        </div>
+                        <h3>Diagnostica Laser</h3>
+                        <p>Strumenti di precisione per identificare micro-danni invisibili a occhio nudo. La cura è nei dettagli.</p>
                     </div>
-                    <div class="step-single">
-                        <div class="step-circle">2</div>
-                        <h4>Riparazione Live</h4>
-                        <p>I nostri tecnici operano davanti ai tuoi occhi con cura maniacale.</p>
+                    <div class="feature-card tilt-card reveal" style="transition-delay: 0.1s">
+                        <div class="feature-icon-circle">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                        </div>
+                        <h3>Componenti OEM</h3>
+                        <p>Solo parti originali o certificate. Il tuo schermo avrà gli stessi colori vividi, la tua batteria la stessa durata.</p>
                     </div>
-                    <div class="step-single">
-                        <div class="step-circle">3</div>
-                        <h4>Garanzia e Via</h4>
-                        <p>Ritira il dispositivo perfetto, coperto da 12 mesi di garanzia.</p>
+                    <div class="feature-card tilt-card reveal" style="transition-delay: 0.2s">
+                        <div class="feature-icon-circle">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        </div>
+                        <h3>Riparazione Express</h3>
+                        <p>Il 90% delle riparazioni avviene in meno di un'ora. Goditi un caffè nella nostra area relax mentre aspetti.</p>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- REVIEWS (7 ITEMS) -->
-        <section class="section-padding" id="reviews">
-            <div class="center-header reveal">
-                <div class="section-glass-header">
-                    <span class="section-tag">Social Proof</span>
-                    <h2 class="section-title">Clienti Soddisfatti.</h2>
+            <!-- SEPARATOR STRIP 1 -->
+            <div class="marquee-section reveal" style="transform: rotate(-1deg); margin: 60px 0;">
+                <div class="marquee-content">
+                    <span class="brand-item" style="color: var(--accent);">Garanzia 12 Mesi</span>
+                    <span class="brand-item" style="color: #111;">Ricambi Originali</span>
+                    <span class="brand-item" style="color: var(--accent);">Tecnici Certificati</span>
+                    <span class="brand-item" style="color: #111;">Velocità</span>
+                    <!-- Repeat -->
+                    <span class="brand-item" style="color: var(--accent);">Garanzia 12 Mesi</span>
+                    <span class="brand-item" style="color: #111;">Ricambi Originali</span>
+                    <span class="brand-item" style="color: var(--accent);">Tecnici Certificati</span>
+                    <span class="brand-item" style="color: #111;">Velocità</span>
+                    <span class="brand-item" style="color: var(--accent);">Garanzia 12 Mesi</span>
+                    <span class="brand-item" style="color: #111;">Ricambi Originali</span>
+                    <span class="brand-item" style="color: var(--accent);">Tecnici Certificati</span>
+                    <span class="brand-item" style="color: #111;">Velocità</span>
                 </div>
             </div>
 
-            <!-- Extra WhatsApp CTA in Reviews -->
-            <div style="text-align: center; margin-bottom: 30px;">
-                <a href="https://wa.me/393510000000?text=Ciao%20QuanTech,%20ho%20letto%20le%20recensioni" class="cta-button" target="_blank" style="padding: 12px 28px; background: #fff; color: var(--whatsapp); border: 1px solid var(--whatsapp);">
-                    <svg viewBox="0 0 24 24" style="fill: var(--whatsapp);"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                    Leggi 200+ Recensioni su WhatsApp
-                </a>
-            </div>
+            <!-- PROCESS -->
+            <section class="section-padding" id="process">
+                <div class="process-glass-box reveal">
+                    <div class="center-header" style="margin-bottom: 40px;">
+                        <span class="section-tag">Il Processo</span>
+                        <h2 class="section-title">Semplice, in 3 step.</h2>
+                    </div>
+                    
+                    <div class="steps-wrapper">
+                        <div class="steps-connector"></div>
+                        <div class="step-single">
+                            <div class="step-circle">1</div>
+                            <h4>Prenota o Passa</h4>
+                            <p>Prenota online per priorità o passa in negozio per una diagnosi.</p>
+                        </div>
+                        <div class="step-single">
+                            <div class="step-circle">2</div>
+                            <h4>Riparazione Live</h4>
+                            <p>I nostri tecnici operano davanti ai tuoi occhi con cura maniacale.</p>
+                        </div>
+                        <div class="step-single">
+                            <div class="step-circle">3</div>
+                            <h4>Garanzia e Via</h4>
+                            <p>Ritira il dispositivo perfetto, coperto da 12 mesi di garanzia.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <div class="reviews-scroller reveal" id="reviewsScroll">
-                <!-- Review 1 -->
-                <div class="review-glass-card tilt-card">
-                    <div class="r-header">
-                        <div class="r-user">
-                            <div class="r-avatar">S</div>
-                            <div>
-                                <div class="r-name">Sante Alberga</div>
-                                <span class="r-meta">2 settimane fa</span>
+            <!-- REVIEWS (7 ITEMS) -->
+            <section class="section-padding" id="reviews">
+                <div class="center-header reveal">
+                    <div class="section-glass-header">
+                        <span class="section-tag">Social Proof</span>
+                        <h2 class="section-title">Clienti Soddisfatti.</h2>
+                    </div>
+                </div>
+
+                <!-- Extra WhatsApp CTA in Reviews -->
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <a href="https://wa.me/393510000000?text=Ciao%20QuanTech,%20ho%20letto%20le%20recensioni" class="cta-button" target="_blank" style="padding: 12px 28px; background: #fff; color: var(--whatsapp); border: 1px solid var(--whatsapp);">
+                        <svg viewBox="0 0 24 24" style="fill: var(--whatsapp);"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                        Leggi 200+ Recensioni su WhatsApp
+                    </a>
+                </div>
+
+                <div class="reviews-scroller reveal" id="reviewsScroll">
+                    <!-- Review 1 -->
+                    <div class="review-glass-card tilt-card">
+                        <div class="r-header">
+                            <div class="r-user">
+                                <div class="r-avatar">S</div>
+                                <div>
+                                    <div class="r-name">Sante Alberga</div>
+                                    <span class="r-meta">2 settimane fa</span>
+                                </div>
+                            </div>
+                            <div class="r-verified">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
                             </div>
                         </div>
-                        <div class="r-verified">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
+                        <div class="r-stars">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                         </div>
+                        <p class="r-text">"Ero veramente in difficoltà con schermo e cristalli rotti su iPhone 15 Pro Max. Proprietario disponibile, gentile e veloce, in mezz’ora mi ha cambiato schermo."</p>
                     </div>
-                    <div class="r-stars">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                    </div>
-                    <p class="r-text">"Ero veramente in difficoltà con schermo e cristalli rotti su iPhone 15 Pro Max. Proprietario disponibile, gentile e veloce, in mezz’ora mi ha cambiato schermo."</p>
-                </div>
-                 <!-- Review 2 -->
-                 <div class="review-glass-card tilt-card">
-                    <div class="r-header">
-                        <div class="r-user">
-                            <div class="r-avatar">P</div>
-                            <div>
-                                <div class="r-name">Pietro Perta</div>
-                                <span class="r-meta">1 mese fa</span>
+                    <!-- Review 2 -->
+                    <div class="review-glass-card tilt-card">
+                        <div class="r-header">
+                            <div class="r-user">
+                                <div class="r-avatar">P</div>
+                                <div>
+                                    <div class="r-name">Pietro Perta</div>
+                                    <span class="r-meta">1 mese fa</span>
+                                </div>
+                            </div>
+                            <div class="r-verified">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
                             </div>
                         </div>
-                        <div class="r-verified">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
+                        <div class="r-stars">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                         </div>
+                        <p class="r-text">"Mi sono rivolto a questo negozio per sostituire batteria iPhone 12 Pro e display Apple Watch. Servizio impeccabile, proprietario gentilissimo."</p>
                     </div>
-                    <div class="r-stars">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                    </div>
-                    <p class="r-text">"Mi sono rivolto a questo negozio per sostituire batteria iPhone 12 Pro e display Apple Watch. Servizio impeccabile, proprietario gentilissimo."</p>
-                </div>
-                 <!-- Review 3 -->
-                 <div class="review-glass-card tilt-card">
-                    <div class="r-header">
-                        <div class="r-user">
-                            <div class="r-avatar">M</div>
-                            <div>
-                                <div class="r-name">Marco Verga</div>
-                                <span class="r-meta">3 settimane fa</span>
+                    <!-- Review 3 -->
+                    <div class="review-glass-card tilt-card">
+                        <div class="r-header">
+                            <div class="r-user">
+                                <div class="r-avatar">M</div>
+                                <div>
+                                    <div class="r-name">Marco Verga</div>
+                                    <span class="r-meta">3 settimane fa</span>
+                                </div>
+                            </div>
+                            <div class="r-verified">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
                             </div>
                         </div>
-                        <div class="r-verified">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
+                        <div class="r-stars">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                         </div>
+                        <p class="r-text">"Onestà rara. Risolto problema al connettore in 20 minuti senza sostituire pezzi inutili. Competenza e trasparenza al top."</p>
                     </div>
-                    <div class="r-stars">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                    </div>
-                    <p class="r-text">"Onestà rara. Risolto problema al connettore in 20 minuti senza sostituire pezzi inutili. Competenza e trasparenza al top."</p>
-                </div>
-                 <!-- Review 4 -->
-                 <div class="review-glass-card tilt-card">
-                    <div class="r-header">
-                        <div class="r-user">
-                            <div class="r-avatar">G</div>
-                            <div>
-                                <div class="r-name">Giulia M.</div>
-                                <span class="r-meta">2 giorni fa</span>
+                    <!-- Review 4 -->
+                    <div class="review-glass-card tilt-card">
+                        <div class="r-header">
+                            <div class="r-user">
+                                <div class="r-avatar">G</div>
+                                <div>
+                                    <div class="r-name">Giulia M.</div>
+                                    <span class="r-meta">2 giorni fa</span>
+                                </div>
+                            </div>
+                            <div class="r-verified">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
                             </div>
                         </div>
-                        <div class="r-verified">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
+                        <div class="r-stars">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                         </div>
+                        <p class="r-text">"Salvati 4 anni di foto dal mio iPhone che non si accendeva più. Non smetterò mai di ringraziarvi! Maghi del recupero dati."</p>
                     </div>
-                    <div class="r-stars">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                    </div>
-                    <p class="r-text">"Salvati 4 anni di foto dal mio iPhone che non si accendeva più. Non smetterò mai di ringraziarvi! Maghi del recupero dati."</p>
-                </div>
-                 <!-- Review 5 -->
-                 <div class="review-glass-card tilt-card">
-                    <div class="r-header">
-                        <div class="r-user">
-                            <div class="r-avatar">L</div>
-                            <div>
-                                <div class="r-name">Luca Rossi</div>
-                                <span class="r-meta">1 settimana fa</span>
+                    <!-- Review 5 -->
+                    <div class="review-glass-card tilt-card">
+                        <div class="r-header">
+                            <div class="r-user">
+                                <div class="r-avatar">L</div>
+                                <div>
+                                    <div class="r-name">Luca Rossi</div>
+                                    <span class="r-meta">1 settimana fa</span>
+                                </div>
+                            </div>
+                            <div class="r-verified">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
                             </div>
                         </div>
-                        <div class="r-verified">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
+                        <div class="r-stars">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                         </div>
+                        <p class="r-text">"Riparazione display iPad Air perfetta. Nemmeno un graffio e tempi rispettati al minuto. Professionalità d'altri tempi."</p>
                     </div>
-                    <div class="r-stars">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                    </div>
-                    <p class="r-text">"Riparazione display iPad Air perfetta. Nemmeno un graffio e tempi rispettati al minuto. Professionalità d'altri tempi."</p>
-                </div>
-                 <!-- Review 6 -->
-                 <div class="review-glass-card tilt-card">
-                    <div class="r-header">
-                        <div class="r-user">
-                            <div class="r-avatar">A</div>
-                            <div>
-                                <div class="r-name">Alessandro B.</div>
-                                <span class="r-meta">3 giorni fa</span>
+                    <!-- Review 6 -->
+                    <div class="review-glass-card tilt-card">
+                        <div class="r-header">
+                            <div class="r-user">
+                                <div class="r-avatar">A</div>
+                                <div>
+                                    <div class="r-name">Alessandro B.</div>
+                                    <span class="r-meta">3 giorni fa</span>
+                                </div>
+                            </div>
+                            <div class="r-verified">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
                             </div>
                         </div>
-                        <div class="r-verified">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
+                        <div class="r-stars">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                         </div>
+                        <p class="r-text">"Il mio MacBook Pro aveva preso acqua. Apple mi aveva detto 'da buttare'. Loro l'hanno riparato in 48 ore a un terzo del prezzo."</p>
                     </div>
-                    <div class="r-stars">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                    </div>
-                    <p class="r-text">"Il mio MacBook Pro aveva preso acqua. Apple mi aveva detto 'da buttare'. Loro l'hanno riparato in 48 ore a un terzo del prezzo."</p>
-                </div>
-                 <!-- Review 7 -->
-                 <div class="review-glass-card tilt-card">
-                    <div class="r-header">
-                        <div class="r-user">
-                            <div class="r-avatar">F</div>
-                            <div>
-                                <div class="r-name">Francesca T.</div>
-                                <span class="r-meta">5 giorni fa</span>
+                    <!-- Review 7 -->
+                    <div class="review-glass-card tilt-card">
+                        <div class="r-header">
+                            <div class="r-user">
+                                <div class="r-avatar">F</div>
+                                <div>
+                                    <div class="r-name">Francesca T.</div>
+                                    <span class="r-meta">5 giorni fa</span>
+                                </div>
+                            </div>
+                            <div class="r-verified">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
                             </div>
                         </div>
-                        <div class="r-verified">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Verified
+                        <div class="r-stars">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                         </div>
+                        <p class="r-text">"Sostituzione batteria e connettore di ricarica. Telefono tornato come nuovo. Super consigliati per onestà e velocità."</p>
                     </div>
-                    <div class="r-stars">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                    </div>
-                    <p class="r-text">"Sostituzione batteria e connettore di ricarica. Telefono tornato come nuovo. Super consigliati per onestà e velocità."</p>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- SEPARATOR STRIP 2 -->
-        <div class="marquee-section reveal" style="transform: rotate(1deg); margin: 60px 0; background: #111;">
-            <div class="marquee-content">
-                <span class="brand-item" style="color: #fff;">Privacy Totale</span>
-                <span class="brand-item" style="color: #888;">Nessuna Perdita Dati</span>
-                <span class="brand-item" style="color: #fff;">Check-up Gratuito</span>
-                <span class="brand-item" style="color: #888;">Qualità Premium</span>
-                 <!-- Repeat -->
-                <span class="brand-item" style="color: #fff;">Privacy Totale</span>
-                <span class="brand-item" style="color: #888;">Nessuna Perdita Dati</span>
-                <span class="brand-item" style="color: #fff;">Check-up Gratuito</span>
-                <span class="brand-item" style="color: #888;">Qualità Premium</span>
-                 <span class="brand-item" style="color: #fff;">Privacy Totale</span>
-                <span class="brand-item" style="color: #888;">Nessuna Perdita Dati</span>
-                <span class="brand-item" style="color: #fff;">Check-up Gratuito</span>
-                <span class="brand-item" style="color: #888;">Qualità Premium</span>
+            <!-- SEPARATOR STRIP 2 -->
+            <div class="marquee-section reveal" style="transform: rotate(1deg); margin: 60px 0; background: #111;">
+                <div class="marquee-content">
+                    <span class="brand-item" style="color: #fff;">Privacy Totale</span>
+                    <span class="brand-item" style="color: #888;">Nessuna Perdita Dati</span>
+                    <span class="brand-item" style="color: #fff;">Check-up Gratuito</span>
+                    <span class="brand-item" style="color: #888;">Qualità Premium</span>
+                    <!-- Repeat -->
+                    <span class="brand-item" style="color: #fff;">Privacy Totale</span>
+                    <span class="brand-item" style="color: #888;">Nessuna Perdita Dati</span>
+                    <span class="brand-item" style="color: #fff;">Check-up Gratuito</span>
+                    <span class="brand-item" style="color: #888;">Qualità Premium</span>
+                    <span class="brand-item" style="color: #fff;">Privacy Totale</span>
+                    <span class="brand-item" style="color: #888;">Nessuna Perdita Dati</span>
+                    <span class="brand-item" style="color: #fff;">Check-up Gratuito</span>
+                    <span class="brand-item" style="color: #888;">Qualità Premium</span>
+                </div>
             </div>
-        </div>
 
-        <!-- FAQ SECTION -->
-        <section class="section-padding" id="faq">
-            <div class="center-header reveal">
-                <div class="section-glass-header">
-                    <span class="section-tag">FAQ</span>
-                    <h2 class="section-title">Domande Frequenti.</h2>
-                </div>
-            </div>
-            
-            <div class="faq-grid reveal">
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-question">
-                        Quanto tempo richiede la riparazione?
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        Il 90% delle nostre riparazioni (cambio schermo, batteria) viene completato in meno di 60 minuti. Per interventi su scheda madre potrebbero volerci 24-48 ore.
+            <!-- FAQ SECTION -->
+            <section class="section-padding" id="faq">
+                <div class="center-header reveal">
+                    <div class="section-glass-header">
+                        <span class="section-tag">FAQ</span>
+                        <h2 class="section-title">Domande Frequenti.</h2>
                     </div>
                 </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-question">
-                         I dati vengono persi?
-                        <span class="faq-icon">+</span>
+                
+                <div class="faq-grid reveal">
+                    <div class="faq-item" onclick="toggleFaq(this)">
+                        <div class="faq-question">
+                            Quanto tempo richiede la riparazione?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Il 90% delle nostre riparazioni (cambio schermo, batteria) viene completato in meno di 60 minuti. Per interventi su scheda madre potrebbero volerci 24-48 ore.
+                        </div>
                     </div>
-                    <div class="faq-answer">
-                        Assolutamente no. Non cancelliamo mai i tuoi dati durante le riparazioni hardware. Consigliamo comunque sempre un backup per sicurezza.
+                    <div class="faq-item" onclick="toggleFaq(this)">
+                        <div class="faq-question">
+                            I dati vengono persi?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Assolutamente no. Non cancelliamo mai i tuoi dati durante le riparazioni hardware. Consigliamo comunque sempre un backup per sicurezza.
+                        </div>
+                    </div>
+                    <div class="faq-item" onclick="toggleFaq(this)">
+                        <div class="faq-question">
+                            Che garanzia offrite?
+                            <span class="faq-icon">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Offriamo una garanzia completa di 12 mesi su tutti i ricambi sostituiti e sulla manodopera.
+                        </div>
                     </div>
                 </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-question">
-                         Che garanzia offrite?
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        Offriamo una garanzia completa di 12 mesi su tutti i ricambi sostituiti e sulla manodopera.
-                    </div>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- CTA FINALE -->
-        <section class="cta-section" id="contact">
-            <div class="cta-glow"></div>
-            <div class="cta-content">
-                <h2 class="cta-title">Il tuo dispositivo merita il meglio.</h2>
-                <p style="font-size: 17px; opacity: 0.8; max-width: 600px; margin: 10px auto 0;">Non aspettare che il danno peggiori. Prenota oggi con un click.</p>
-                <a href="https://wa.me/393510000000?text=Ciao%20QuanTech,%20ho%20bisogno%20di%20assistenza" class="cta-button" target="_blank" style="margin-top: 25px; padding: 16px 40px; font-size: 16px;">
-                    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                    Prenota su WhatsApp
-                </a>
-                <div style="margin-top: 20px; font-size: 13px; opacity: 0.5;">+39 02 123 4567</div>
-            </div>
-        </section>
+            <!-- CTA FINALE -->
+            <section class="cta-section" id="contact">
+                <div class="cta-glow"></div>
+                <div class="cta-content">
+                    <h2 class="cta-title">Il tuo dispositivo merita il meglio.</h2>
+                    <p style="font-size: 17px; opacity: 0.8; max-width: 600px; margin: 10px auto 0;">Non aspettare che il danno peggiori. Prenota oggi con un click.</p>
+                    <a href="https://wa.me/393510000000?text=Ciao%20QuanTech,%20ho%20bisogno%20di%20assistenza" class="cta-button" target="_blank" style="margin-top: 25px; padding: 16px 40px; font-size: 16px;">
+                        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                        Prenota su WhatsApp
+                    </a>
+                    <div style="margin-top: 20px; font-size: 13px; opacity: 0.5;">+39 02 123 4567</div>
+                </div>
+            </section>
 
-        <!-- FOOTER -->
-        <footer>
-            <div class="footer-grid">
-                <div class="footer-col footer-brand">
-                    <h4>QuanTech</h4>
-                    <p>White Glass Engine.<br>Tecnologia e Design al servizio della riparazione.</p>
+            <!-- FOOTER -->
+            <footer>
+                <div class="footer-grid">
+                    <div class="footer-col footer-brand">
+                        <h4>QuanTech</h4>
+                        <p>White Glass Engine.<br>Tecnologia e Design al servizio della riparazione.</p>
+                    </div>
+                    <div class="footer-col">
+                        <h5>Servizi</h5>
+                        <ul>
+                            <li><a href="#features" onclick="smoothScroll(event, '#features')">Riparazione iPhone</a></li>
+                            <li><a href="#features" onclick="smoothScroll(event, '#features')">Riparazione Mac</a></li>
+                            <li><a href="#features" onclick="smoothScroll(event, '#features')">Recupero Dati</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h5>Azienda</h5>
+                        <ul>
+                            <li><a href="#hero" onclick="smoothScroll(event, '#hero')">Chi Siamo</a></li>
+                            <li><a href="https://wa.me/393510000000" target="_blank">Contatti</a></li>
+                            <li><a href="#">Privacy</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h5>Social</h5>
+                        <ul>
+                            <li><a href="#">Instagram</a></li>
+                            <li><a href="#">Facebook</a></li>
+                            <li><a href="https://www.google.com/maps" target="_blank">Maps</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="footer-col">
-                    <h5>Servizi</h5>
-                    <ul>
-                        <li><a href="#features">Riparazione iPhone</a></li>
-                        <li><a href="#features">Riparazione Mac</a></li>
-                        <li><a href="#features">Recupero Dati</a></li>
-                    </ul>
+                <div style="text-align: center; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.05); font-size: 12px; opacity: 0.7;">
+                    &copy; 2024 QuanTech. Tutti i diritti riservati.
                 </div>
-                <div class="footer-col">
-                    <h5>Azienda</h5>
-                    <ul>
-                        <li><a href="#hero">Chi Siamo</a></li>
-                        <li><a href="https://wa.me/393510000000" target="_blank">Contatti</a></li>
-                        <li><a href="#">Privacy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h5>Social</h5>
-                    <ul>
-                        <li><a href="#">Instagram</a></li>
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="https://www.google.com/maps" target="_blank">Maps</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div style="text-align: center; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.05); font-size: 12px; opacity: 0.7;">
-                &copy; 2024 QuanTech. Tutti i diritti riservati.
-            </div>
-        </footer>
-    </div>
+            </footer>
+        </div> <!-- End of main-wrapper -->
 
     <script>
+        // Custom Smooth Scroll Function
+        function smoothScroll(e, targetId) {
+            e.preventDefault();
+            const target = document.querySelector(targetId);
+            if (!target) return;
+
+            // Offset per l'header (140px per lasciare spazio sotto l'header)
+            const headerOffset = 140;
+            const elementPosition = target.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            // Custom duration and easing
+            const startPosition = window.pageYOffset;
+            const distance = offsetPosition - startPosition;
+            const duration = 1200; // 1200ms = 1.2 secondi (più lento e fluido)
+            let start = null;
+
+            function animation(currentTime) {
+                if (start === null) start = currentTime;
+                const timeElapsed = currentTime - start;
+                const run = ease(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            }
+
+            // Easing function (easeInOutCubic)
+            function ease(t, b, c, d) {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t * t + b;
+                t -= 2;
+                return c / 2 * (t * t * t + 2) + b;
+            }
+
+            requestAnimationFrame(animation);
+        }
+
         // Toggle Mobile Menu
         function toggleMenu() {
             const menu = document.getElementById('fsMenu');
